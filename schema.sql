@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `movies` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `netflix_id` VARCHAR(100) NOT NULL,
+  `title` VARCHAR(50) NOT NULL,
+  `year` CHAR(4) NOT NULL,
+  `mpaa_rating` VARCHAR(10) NOT NULL,
+  `categories` VARCHAR(200) NOT NULL,
+  `user_rating` FLOAT NOT NULL,
+  `box_art` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(50) NOT NULL,
+  `last_name` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
