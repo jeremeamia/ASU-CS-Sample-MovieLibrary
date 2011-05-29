@@ -1,0 +1,11 @@
+Icon?
+.DS_Store
+.svn
+nbproject
+Thumbs.db
+*.bak
+*.sass-cache
+*.idea
+examples
+config.php
+.htaccess
