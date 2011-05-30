@@ -60,12 +60,18 @@ abstract class Model
 		if ( ! $result)
 			throw new RuntimeException('The '.$this->_table.' record failed to be created.');
 
+		// Get the ID
+		if ($result)
+		{
+			$this->_properties['id'] = $this->_database->lastInsertedId();
+		}
+
 		return $this;
 	}
 
 	public function read($id)
 	{
-		$result = $this->_database->select($this->_table, $id);
+		$result = $this->_database->select($this->_table, $id) ?: array();
 		return $this->populate($result);
 	}
 
@@ -77,14 +83,16 @@ abstract class Model
 		}
 
 		$results = $this->_database->selectAll($this->_table, $where, $order_by, $limit, $offset);
-		
-		foreach ($results as & $result)
-		{
-			$model = clone $this;
-			$result = $model->populate($result);
-		}
+		return $this->_createModelsFromResults($results);
+	}
 
-		return $results;
+	public function readFirst($where = NULL, array $order_by = NULL, $limit = NULL, $offset = NULL)
+	{
+		$results = $this->readAll($where, $order_by, $limit, $offset);
+		if (isset($results[0]))
+			return $results[0];
+		else
+			return NULL;
 	}
 
 	public function countAll($where = NULL)
@@ -190,5 +198,16 @@ abstract class Model
 		$this->_changed = array();
 
 		return $this;
+	}
+
+	protected function _createModelsFromResults(array $results)
+	{
+		foreach ($results as & $result)
+		{
+			$model = clone $this;
+			$result = $model->populate($result);
+		}
+
+		return $results;
 	}
 }

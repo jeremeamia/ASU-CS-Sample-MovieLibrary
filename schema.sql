@@ -1,20 +1,28 @@
 CREATE TABLE IF NOT EXISTS `movies` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `netflix_id` VARCHAR(100) NOT NULL,
-  `title` VARCHAR(50) NOT NULL,
-  `year` CHAR(4) NOT NULL,
-  `mpaa_rating` VARCHAR(10) NOT NULL,
-  `categories` VARCHAR(200) NOT NULL,
-  `user_rating` FLOAT NOT NULL,
-  `box_art` VARCHAR(100) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `netflix_id` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(50) CHARACTER SET utf32 COLLATE utf32_unicode_ci NOT NULL,
+  `year` char(4) COLLATE utf8_unicode_ci NOT NULL,
+  `mpaa_rating` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `categories` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `user_rating` float NOT NULL,
+  `box_art` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `ownerships` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL,
+  `movie_id` int(11) unsigned NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(50) NOT NULL,
-  `last_name` VARCHAR(50) NOT NULL,
-  `email` VARCHAR(100) NOT NULL,
-  `password` VARCHAR(50) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `last_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

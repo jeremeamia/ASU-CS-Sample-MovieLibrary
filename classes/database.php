@@ -34,6 +34,24 @@ class Database
 	
 	final private function __clone() {}
 
+	public function query($sql)
+	{
+		$type = current(explode(' ', $sql, 2));
+		$rows = $this->_connection->query($sql);
+
+		if ($type == 'SELECT')
+		{
+			$result = $rows->fetch_all(MYSQLI_ASSOC);
+			$rows->close();
+		}
+		else
+		{
+			$result = (bool) $rows;
+		}
+
+		return $result;
+	}
+
 	public function prepareValue($value, $type = NULL)
 	{
 		// Only allow scalar values (and DateTime) in the method
@@ -92,7 +110,7 @@ class Database
 			->query($sql)
 			->fetch_assoc();
 
-		return $result ? $result : array();
+		return $result ? $result : NULL;
 	}
 
 	public function selectAll($table, $where = NULL, $order_by = NULL, $limit = NULL, $offset = NULL)
@@ -129,15 +147,7 @@ class Database
 		}
 
 		// Execute SELECT query and fetch all results
-		$results = $this->_connection->query($sql);
-		$rows = array();
-		if ($results->num_rows > 0)
-		{
-			$rows = $results->fetch_all(MYSQLI_ASSOC);
-		}
-		$results->close();
-
-		return $rows;
+		return $this->query($sql);
 	}
 
 	public function countAll($table, $where = NULL)
@@ -152,11 +162,7 @@ class Database
 		}
 
 		// Execute SELECT query and COUNT
-		$results = $this->_connection->query($sql);
-		$count = $results->num_rows;
-		$results->close();
-
-		return $count;
+		return count($this->query($sql));
 	}
 
 	public function insert($table, array $values)
@@ -165,17 +171,13 @@ class Database
 			. implode(', ', array_keys($values)).') VALUES ('
 			. implode(', ', array_values($values)).')';
 
-		// Execute the query
-		$result = $this->_connection->query($sql);
+		// Execute the query and return success/failure
+		return $this->query($sql);
+	}
 
-		// Get the ID
-		if ($result)
-		{
-			$this->_properties['id'] = $this->_connection->insert_id;
-		}
-
-		// Return success/failure
-		return (bool) $result;
+	public function lastInsertedId()
+	{
+		return (int) $this->_connection->insert_id;
 	}
 
 	public function update($table, $id, array $values)
@@ -188,22 +190,19 @@ class Database
 		}
 		$sql = rtrim($sql, ', ').' WHERE id = '.$id;
 
-		// Execute the query
-		$result = $this->_connection->query($sql);
-
-		// Return success/failure
-		return (bool) $result;
+		// Execute the query and return success/failure
+		return $this->query($sql);
 	}
 
 	public function delete($table, $id)
 	{
 		$sql = 'DELETE FROM `'.$table.'` WHERE id = '.$this->_properties['id'];
-		return (bool) $this->_connection->query($sql);
+		return $this->query($sql);
 	}
 
 	public function deleteAll($table)
 	{
 		$sql = 'DELETE FROM `'.$table.'`';
-		return (bool) $this->_connection->query($sql);
+		return $this->query($sql);
 	}
 }

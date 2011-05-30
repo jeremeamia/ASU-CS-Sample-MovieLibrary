@@ -6,8 +6,10 @@ class Controller_Home extends Controller_Page
 
 	public function execute()
 	{
+		$movies = $this->getContainer()->build('model', 'movie')->getMoviesOwnedByUser($this->getUser());
+
 		$this->setResponse($this->getContainer()->build('view', 'home')
-			->set('movies', $this->getContainer()->build('model', 'movie')->readAll())
+			->set('movies', $movies)
 		);
 	}
 }

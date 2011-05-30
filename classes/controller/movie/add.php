@@ -9,25 +9,43 @@ class Controller_Movie_Add extends Controller_Page
 		$results = array();
 		if ($this->_request->post())
 		{
-			if ($movie_id = $this->_request->post('movie'))
+			// Perform movie search via Netflix (STAGE 1)
+			if ($search = $this->_request->post('search'))
 			{
-				$movie_data = (array) $this->getContainer()->build('netflix')->getMovie($movie_id);
-				$movie_data['categories'] = implode(', ', $movie_data['categories']);
-				$movie = $this->getContainer()->build('model', 'movie')->set($movie_data);
-				if ($movie->isValid())
+				$results = $this->getContainer()->build('netflix')->lookup($search);
+			}
+
+			// Lookup chosen movie and add to library (STAGE 2)
+			elseif ($netflix_id = $this->_request->post('movie'))
+			{
+				// First, look it up in our system
+				$movie = $this->getContainer()->build('model', 'movie')
+					->readFirst('`netflix_id` = "'.$netflix_id.'"');
+
+				// If it doesn't exist in our system, let's add it
+				if ($movie === NULL)
 				{
-					$movie->create();
-					$this->_request->setUserMessage('success', 'You have added the movie "'.$movie->get('title').'".');
+					$new_movie = $this->getContainer()->build('model', 'movie')
+						->set((array) $this->getContainer()->build('netflix')->getMovie($netflix_id));
+					if ($new_movie->isValid())
+					{
+						$movie = $new_movie->create();
+					}
+				}
+
+				// Now let's link the movie to the current user
+				if ($movie !== NULL)
+				{
+					$ownership = $this->getContainer()->build('model', 'ownership');
+					$ownership->linkMovieToUser($movie, $this->getUser());
+					$this->_request->setUserMessage('success', 'You have added the movie "'.$movie->get('title').'" was added to your library.');
 				}
 				else
 				{
-					$this->_request->setUserMessage('error', 'The movie "'.$movie->title.'" could not be added.');
+					$this->_request->setUserMessage('error', 'The movie could not be added to your library.');
 				}
+
 				$this->_request->redirect('home');
-			}
-			elseif ($search = $this->_request->post('search'))
-			{
-				$results = $this->getContainer()->build('netflix')->lookup($search);
 			}
 		}
 
