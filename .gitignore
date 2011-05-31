@@ -7,5 +7,5 @@ Thumbs.db
 *.sass-cache
 *.idea
 examples
-config.php
-.htaccess
+/config.php
+/.htaccess
