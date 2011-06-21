@@ -6,15 +6,6 @@ abstract class Controller
 	protected $_response;
 	protected $_container;
 
-	public static function factory(Request $request)
-	{
-		$class = 'Controller_'.str_replace('/', '_', $request->getController());
-		if ( ! class_exists($class))
-			return NULL;
-
-		return new $class($request);
-	}
-
 	public function __construct(Request $request)
 	{
 		$this->_request = $request;

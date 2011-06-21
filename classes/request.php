@@ -23,13 +23,18 @@ class Request
 	public function execute()
 	{
 		// Create a controller using this request
-		$controller = Controller::factory($this);
+		$controller = NULL;
+		$class = 'Controller_'.str_replace('/', '_', $this->_controller);
+		if (class_exists($class))
+		{
+			$controller = new $class($this);
+		}
 
 		// Handle 404 errors
 		if ($controller == NULL)
 		{
 			$this->_controller = 'error/notfound';
-			$controller = Controller::factory($this);
+			$controller = new Controller_Error_NotFound($this);
 		}
 
 		try
@@ -41,12 +46,12 @@ class Request
 		}
 		catch (Exception $ex)
 		{
-			echo '<pre>'.$ex->getMessage().'</pre>';
-
 			// Handle 500 errors
 			$this->_controller = 'error/internal';
-			$controller = Controller::factory($this);
+			$controller = new Controller_Error_Internal($this);
+			$controller->preExecute();
 			$controller->execute();
+			$controller->postExecute();
 		}
 
 		// Send the response back to the App
