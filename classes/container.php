@@ -82,42 +82,38 @@ class Container
 	{
 		if ( ! isset($this->_cache['helpers']))
 		{
-			$helpers = new ArrayObject();
-			$helpers->html = new Helper_HTML($this->getRequest());
-			$helpers->form = new Helper_Form($this->getRequest(), $helpers->html);
+			$helpers = new Helper_Collection();
+			$helpers->add('html', new Helper_HTML($this->getRequest()));
+			$helpers->add('form', new Helper_Form($this->getRequest(), $helpers->get('html')));
 			$this->_cache['helpers'] = $helpers;
 		}
 
 		return $this->_cache['helpers'];
 	}
 
-	public function getView($name)
+	public function getView($file)
 	{
-		$view = new View($name);
-		$view->set('helpers', $this->getHelpers());
-		$view->set('config',  $this->getConfig());
+		$view = new View($file, $this->getHelpers(), $this->getConfig());
 
 		return $view;
 	}
 
-	public function getModel($name)
+	public function getModel($type)
 	{
 		// Find the class
-		$class = 'Model_'.$name;
+		$class = 'Model_'.$type;
 		if ( ! class_exists($class))
-			throw new RuntimeException('The model, "'.$class.'", does not exist.');
+			throw new RuntimeException('The "'.$type.'" model does not exist.');
 
-		// Instantiate the model with its dependencies
-		if ($name == 'user')
-		{
-			// User model needs Session to do authentication
-			$model = new $class($this->getDatabase(), $this->getConfig(), $this->getSession());
-		}
-		else
-		{
-			$model = new $class($this->getDatabase(), $this->getConfig());
-		}
+		$model = new $class($this->getDatabase(), $this->getConfig());
 
 		return $model;
+	}
+
+	public function getUserModel()
+	{
+		$user = new Model_User($this->getDatabase(), $this->getConfig(), $this->getSession());
+
+		return $user;
 	}
 }

@@ -4,17 +4,31 @@ class View
 {
 	protected $_data;
 	protected $_file;
+	protected $_helpers;
+	protected $_config;
 
-	public function __construct($file)
+	public function __construct($file, Helper_Collection $helpers, Config $config)
 	{
-		$this->_file = 'templates/'.$file.'.php';
 		$this->_data = array();
+		$this->_file = 'templates/'.$file.'.php';
+		$this->_helpers = $helpers;
+		$this->_config = $config;
 	}
 
 	public function set($key, $value)
 	{
 		$this->_data[$key] = $value;
 		return $this;
+	}
+
+	public function getHelper($name)
+	{
+		return $this->_helpers->get($name);
+	}
+
+	public function getConfigValue($group_key, $key = NULL, $default = NULL)
+	{
+		return $this->_config->get($group_key, $key, $default);
 	}
 
 	public function render()

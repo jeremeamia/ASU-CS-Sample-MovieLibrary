@@ -1,6 +1,6 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
 
-class Helper_Form
+class Helper_Form extends Helper
 {
 	protected $_request = NULL;
 	protected $_html = NULL;

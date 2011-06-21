@@ -25,7 +25,7 @@ abstract class Controller_Page extends Controller
 
 	public function getUser()
 	{
-		$user = $this->_container->getModel('user');
+		$user = $this->_container->getUserModel();
 		if ($logged_in_user_id = $this->_container->getSession()->get('user.id'))
 		{
 			$user->read($logged_in_user_id);

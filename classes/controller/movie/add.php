@@ -2,7 +2,7 @@
 
 class Controller_Movie_Add extends Controller_Page
 {
-	protected $_title = 'Home';
+	protected $_title = 'Add a Movie';
 
 	public function execute()
 	{

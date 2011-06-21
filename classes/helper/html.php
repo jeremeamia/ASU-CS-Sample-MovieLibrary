@@ -1,6 +1,6 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
 
-class Helper_HTML
+class Helper_HTML extends Helper
 {
 	protected $_request = NULL;
 
@@ -23,7 +23,7 @@ class Helper_HTML
 		{
 			$html .= ' '.$key.'="'.$value.'"';
 		}
-		
+
 		return $html;
 	}
 }

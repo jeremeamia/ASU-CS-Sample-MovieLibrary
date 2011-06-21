@@ -15,7 +15,7 @@ class Controller_Login extends Controller_Page
 		{
 			$email = $this->_request->post('email');
 			$password = $this->_request->post('password');
-			$user = $this->getContainer()->getModel('user');
+			$user = $this->getContainer()->getUserModel();
 			if ($user->login($email, $password))
 			{
 				$this->_request->setUserMessage('success', 'You are now logged in!');
