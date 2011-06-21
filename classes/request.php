@@ -2,8 +2,6 @@
 
 class Request
 {
-	protected static $_instance;
-
 	protected $_container;
 	protected $_post;
 	protected $_get;
@@ -11,20 +9,7 @@ class Request
 	protected $_controller;
 	protected $_resource_id;
 
-	public static function instance(Container $container = NULL)
-	{
-		if (Request::$_instance === NULL)
-		{
-			if ( ! $container instanceof Container)
-				throw new InvalidArgumentException('The Request class must be provided a Container object.');
-
-			Request::$_instance = new Request($container);
-		}
-		
-		return Request::$_instance;
-	}
-	
-	final private function __construct(Container $container)
+	public function __construct(Container $container)
 	{
 		$this->_container = $container;
 
@@ -34,8 +19,6 @@ class Request
 
 		$this->_processUrl();
 	}
-	
-	final private function __clone() {}
 
 	public function execute()
 	{
@@ -54,6 +37,7 @@ class Request
 			// Execute the request
 			$controller->preExecute();
 			$controller->execute();
+			$controller->postExecute();
 		}
 		catch (Exception $ex)
 		{
@@ -68,19 +52,19 @@ class Request
 		// Send the response back to the App
 		return $controller->getResponse();
 	}
-	
+
 	public function post($key = NULL, $default = NULL)
 	{
 		if ($key === NULL) return $this->_post;
 		return array_key_exists($key, $this->_post) ? $this->_post[$key] : $default;
 	}
-	
+
 	public function get($key, $default = NULL)
 	{
 		if ($key === NULL) return $this->_get;
 		return array_key_exists($key, $this->_get) ? $this->_get[$key] : $default;
 	}
-	
+
 	public function cookie($key, $default = NULL)
 	{
 		if ($key === NULL) return $this->_cookie;
@@ -132,9 +116,7 @@ class Request
 			{
 				$uri .= '/'.$id;
 			}
-			$uri = $this->getContainer()
-				->getConfig()
-				->get('site', 'base_uri').$uri;
+			$uri = $this->_container->getConfig()->get('site', 'base_uri').$uri;
 		}
 		else
 		{
@@ -168,7 +150,7 @@ class Request
 		header('Location: '.$url);
 		exit;
 	}
-	
+
 	protected function _sanitize($value)
 	{
 		if (is_array($value))
@@ -216,8 +198,14 @@ class Request
 			$uri = (string) substr($uri, strlen('index.php/'));
 		}
 
+		// If the URI is empty, then we'll use the default
+		if (empty($uri))
+		{
+			$uri = $this->_container->getConfig()->get('site', 'default_uri', 'home');
+		}
+
 		// Now set the controller and resource ID
-		if (preg_match('/^([^0-9]*)(\/[0-9]+\/?)?$/', $uri, $matches))
+		if (preg_match('/^([^0-9]+)(\/[0-9]+\/?)?$/', $uri, $matches))
 		{
 			$this->_controller = trim($matches[1], '/');
 			$this->_resource_id = isset($matches[2]) ? trim($matches[2], '/') : NULL;

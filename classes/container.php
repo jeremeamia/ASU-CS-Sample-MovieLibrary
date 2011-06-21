@@ -2,80 +2,122 @@
 
 class Container
 {
-	protected $_config;
-	protected $_session;
-
-	public function __construct(Config $config, Session $session)
-	{
-		$this->_config  = $config;
-		$this->_session = $session;
-	}
+	protected $_cache = array();
 
 	public function getConfig()
 	{
-		return $this->_config;
+		if ( ! isset($this->_cache['config']))
+		{
+			$config_file = new SplFileInfo('config.php');
+			$this->_cache['config'] = new Config($config_file);
+		}
+
+		return $this->_cache['config'];
 	}
 
 	public function getSession()
 	{
-		return $this->_session;
+		if ( ! isset($this->_cache['session']))
+		{
+			$this->_cache['session'] = new Session(App::NAME);
+		}
+
+		return $this->_cache['session'];
 	}
 
-	public function build($type, $name = NULL)
+	public function getRequest()
 	{
-		$method = '_'.strtolower($type);
-		if ( ! method_exists($this, $method))
-			throw new InvalidArgumentException('The type of object requested of the Container does not exist.');
+		if ( ! isset($this->_cache['request']))
+		{
+			$this->_cache['request'] = new Request($this);
+		}
 
-		return $this->$method($name);
+		return $this->_cache['request'];
 	}
 
-	protected function _request()
+	public function getDatabaseConnection()
 	{
-		return Request::instance($this);
+		if ( ! isset($this->_cache['database_connection']))
+		{
+			$config = $this->getConfig();
+			$connection = new MySQLi(
+				$config->get('database', 'host'),
+				$config->get('database', 'username'),
+				$config->get('database', 'password'),
+				$config->get('database', 'name')
+			);
+
+			if ($connection->connect_error)
+				throw new RuntimeException('Could not connect to the MySQL database.');
+
+			$this->_cache['database_connection'] = $connection;
+		}
+
+		return $this->_cache['database_connection'];
 	}
 
-	protected function _view($name)
+	public function getDatabase()
 	{
-		// Setup an object that houses helper classes available to the view
-		$helpers = new ArrayObject();
-		$helpers->html = new Helper_HTML(Request::instance());
-		$helpers->form = new Helper_Form(Request::instance(), $helpers->html);
+		if ( ! isset($this->_cache['database']))
+		{
+			$connection = $this->getDatabaseConnection();
+			$this->_cache['database'] = new Database($connection);
+		}
 
+		return $this->_cache['database'];
+	}
+
+	public function getNetflix()
+	{
+		if ( ! isset($this->_cache['netflix']))
+		{
+			$oauth = new Service_Netflix_OAuth();
+			$this->_cache['netflix'] = new Service_Netflix_Library($oauth, $this->getConfig());
+		}
+
+		return $this->_cache['netflix'];
+	}
+
+	public function getHelpers()
+	{
+		if ( ! isset($this->_cache['helpers']))
+		{
+			$helpers = new ArrayObject();
+			$helpers->html = new Helper_HTML($this->getRequest());
+			$helpers->form = new Helper_Form($this->getRequest(), $helpers->html);
+			$this->_cache['helpers'] = $helpers;
+		}
+
+		return $this->_cache['helpers'];
+	}
+
+	public function getView($name)
+	{
 		$view = new View($name);
-		$view->set('helpers', $helpers);
-		$view->set('config',  $this->_config);
+		$view->set('helpers', $this->getHelpers());
+		$view->set('config',  $this->getConfig());
 
 		return $view;
 	}
 
-	protected function _model($name)
+	public function getModel($name)
 	{
 		// Find the class
 		$class = 'Model_'.$name;
 		if ( ! class_exists($class))
 			throw new RuntimeException('The model, "'.$class.'", does not exist.');
 
-		// Get dependencies
-		$database = Database::instance($this->_config);
-
 		// Instantiate the model with its dependencies
 		if ($name == 'user')
 		{
 			// User model needs Session to do authentication
-			$model = new $class($database, $this->_config, $this->_session);
+			$model = new $class($this->getDatabase(), $this->getConfig(), $this->getSession());
 		}
 		else
 		{
-			$model = new $class($database, $this->_config);
+			$model = new $class($this->getDatabase(), $this->getConfig());
 		}
 
 		return $model;
-	}
-
-	protected function _netflix()
-	{
-		$oauth = new Service_Netflix_OAuth();
-		return new Service_Netflix_Library($oauth, $this->_config);
 	}
 }

@@ -16,7 +16,7 @@ class Helper_Form
 		$attributes = array
 		(
 			'method' => 'post',
-			'action' => $action ?: $this->_request->currentUri(),
+			'action' => $action ? $action : $this->_request->currentUri(),
 		);
 		return '<form'.$this->_html->attributes($attributes).'>';
 	}
@@ -79,7 +79,7 @@ class Helper_Form
 			'id'    => $name,
 			'src'   => $src,
 			'value' => $value,
-			'alt'   => $alt ?: $name,
+			'alt'   => $alt ? $alt : $name,
 		);
 
 		return '<input'.$this->_html->attributes($attributes).' />';

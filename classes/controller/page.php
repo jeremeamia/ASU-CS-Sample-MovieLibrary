@@ -15,7 +15,7 @@ abstract class Controller_Page extends Controller
 
 	public function getResponse()
 	{
-		return $this->getContainer()->build('view', 'page')
+		return $this->getContainer()->getView('page')
 			->set('title',   $this->_title)
 			->set('content', parent::getResponse())
 			->set('message', $this->getMessage())
@@ -24,7 +24,7 @@ abstract class Controller_Page extends Controller
 
 	public function getUser()
 	{
-		$user = $this->getContainer()->build('model', 'user');
+		$user = $this->getContainer()->getModel('user');
 		if ($logged_in_user_id = $this->getContainer()->getSession()->get('user.id'))
 		{
 			$user->read($logged_in_user_id);

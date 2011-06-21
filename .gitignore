@@ -5,7 +5,7 @@ nbproject
 Thumbs.db
 *.bak
 *.sass-cache
-*.idea
+.idea
 examples
 /config.php
 /.htaccess

@@ -71,7 +71,8 @@ abstract class Model
 
 	public function read($id)
 	{
-		$result = $this->_database->select($this->_table, $id) ?: array();
+		$result = $this->_database->select($this->_table, $id);
+
 		return $this->populate($result);
 	}
 
@@ -83,6 +84,7 @@ abstract class Model
 		}
 
 		$results = $this->_database->selectAll($this->_table, $where, $order_by, $limit, $offset);
+
 		return $this->_createModelsFromResults($results);
 	}
 

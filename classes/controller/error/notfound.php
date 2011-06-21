@@ -6,6 +6,6 @@ class Controller_Error_NotFound extends Controller_Page
 
 	public function execute()
 	{
-		$this->setResponse($this->getContainer()->build('view', 'error/notfound'));
+		$this->setResponse($this->getContainer()->getView('error/notfound'));
 	}
 }

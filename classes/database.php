@@ -2,37 +2,12 @@
 
 class Database
 {
-	protected static $_instance = NULL;
-	
-	public static function instance(Config $config = NULL)
-	{
-		if (Database::$_instance === NULL)
-		{
-			if ( ! $config instanceof Config)
-				throw new InvalidArgumentException('The database connection information was missing.');
-
-			Database::$_instance = new Database($config);
-		}
-		
-		return Database::$_instance;
-	}
-
 	protected $_connection = NULL;
-	
-	final private function __construct(Config $config)
-	{
-		$this->_connection = new MySQLi(
-			$config->get('database', 'host'),
-			$config->get('database', 'username'),
-			$config->get('database', 'password'),
-			$config->get('database', 'name')
-		);
 
-		if ($this->_connection->connect_error)
-			throw new RuntimeException('Could not connect to the database.');
+	public function __construct(MySQLi $connection)
+	{
+		$this->_connection = $connection;
 	}
-	
-	final private function __clone() {}
 
 	public function query($sql)
 	{
@@ -41,8 +16,15 @@ class Database
 
 		if ($type == 'SELECT')
 		{
-			$result = $rows->fetch_all(MYSQLI_ASSOC);
-			$rows->close();
+			if ($rows)
+			{
+				$result = $rows->fetch_all(MYSQLI_ASSOC);
+				$rows->close();
+			}
+			else
+			{
+				$result = array();
+			}
 		}
 		else
 		{
@@ -106,9 +88,7 @@ class Database
 		$id  = is_numeric($id) ? intval($id) : 0;
 		$sql = 'SELECT * FROM `'.$table.'` WHERE id = '.$id;
 
-		$result = $this->_connection
-			->query($sql)
-			->fetch_assoc();
+		$result = $this->_connection->query($sql);
 
 		return $result ? $result : NULL;
 	}

@@ -2,19 +2,7 @@
 
 class Session
 {
-	protected static $_instance = NULL;
-
-	public static function instance($name = NULL)
-	{
-		if (Session::$_instance === NULL)
-		{
-			Session::$_instance = new Session($name);
-		}
-
-		return Session::$_instance;
-	}
-
-	final private function __construct($name = NULL)
+	public function __construct($name = NULL)
 	{
 		// Do not allow PHP to send Cache-Control headers
 		session_cache_limiter(FALSE);
@@ -28,13 +16,10 @@ class Session
 		// Start the session
 		session_start();
 
-		// Make sure the session is saved on shutdown... with a lambda!
-		$save_session = function() {session_write_close();};
-		register_shutdown_function($save_session);
+		// Make sure the session is saved on shutdown
+		register_shutdown_function(array($this, 'shutdown'));
 	}
 
-	final private function __clone() {}
-	
 	public function & asArray()
 	{
 		return $_SESSION;
@@ -70,5 +55,10 @@ class Session
 
 		// Did destruction work?
 		return (bool) ! session_id();
+	}
+
+	public function shutdown()
+	{
+		session_write_close();
 	}
 }

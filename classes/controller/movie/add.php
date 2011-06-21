@@ -12,21 +12,21 @@ class Controller_Movie_Add extends Controller_Page
 			// Perform movie search via Netflix (STAGE 1)
 			if ($search = $this->_request->post('search'))
 			{
-				$results = $this->getContainer()->build('netflix')->lookup($search);
+				$results = $this->getContainer()->getNetflix()->lookup($search);
 			}
 
 			// Lookup chosen movie and add to library (STAGE 2)
 			elseif ($netflix_id = $this->_request->post('movie'))
 			{
 				// First, look it up in our system
-				$movie = $this->getContainer()->build('model', 'movie')
+				$movie = $this->getContainer()->getModel('movie')
 					->readFirst('`netflix_id` = "'.$netflix_id.'"');
 
 				// If it doesn't exist in our system, let's add it
 				if ($movie === NULL)
 				{
-					$new_movie = $this->getContainer()->build('model', 'movie')
-						->set((array) $this->getContainer()->build('netflix')->getMovie($netflix_id));
+					$new_movie = $this->getContainer()->getModel('movie')
+						->set((array) $this->getContainer()->getNetflix()->getMovie($netflix_id));
 					if ($new_movie->isValid())
 					{
 						$movie = $new_movie->create();
@@ -36,7 +36,7 @@ class Controller_Movie_Add extends Controller_Page
 				// Now let's link the movie to the current user
 				if ($movie !== NULL)
 				{
-					$ownership = $this->getContainer()->build('model', 'ownership');
+					$ownership = $this->getContainer()->getModel('ownership');
 					$ownership->linkMovieToUser($movie, $this->getUser());
 					$this->_request->setUserMessage('success', 'You have added the movie "'.$movie->get('title').'" was added to your library.');
 				}
@@ -49,7 +49,7 @@ class Controller_Movie_Add extends Controller_Page
 			}
 		}
 
-		$this->setResponse($this->getContainer()->build('view', 'movie/add')
+		$this->setResponse($this->getContainer()->getView('movie/add')
 			->set('results', $results)
 		);
 	}

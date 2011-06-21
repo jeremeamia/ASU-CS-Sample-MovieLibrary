@@ -4,25 +4,27 @@ class App
 {
 	const NAME = 'MyMovieLibrary';
 
-	public static function execute()
+	protected $_response = NULL;
+
+	public function execute()
 	{
 		// Register the auto-loader that will load the files we need for the classes we instantiate
 		if ( ! spl_autoload_register('App::load'))
 			throw new RuntimeException('The application\'s auto-loader failed to be registered.');
 
-		// Create the config; it will load our config settings from config.php
-		$config = new Config(new SplFileInfo('config.php'));
-
-		// Create and setup the session for use in the application
-		$session = Session::instance(App::NAME);
-
 		// Create the dependency injection container that will help us maintain IoC (inversion of control)
-		$container = new Container($config, $session);
+		$container = new Container();
 
-		// Create the request that will process the URL, find the appropriate controller, and execute it
-		$request = $container->build('request');
+		// Create the request (via the container) that will process the URL, find the appropriate controller, and execute it
+		$request = $container->getRequest();
+		$this->_response = $request->execute();
 
-		return $request->execute();
+		return $this;
+	}
+
+	public function renderResponse()
+	{
+		return (string) $this->_response;
 	}
 
 	public static function load($class)

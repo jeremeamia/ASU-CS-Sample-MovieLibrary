@@ -2,10 +2,12 @@
 /**
  * My Movie Library
  *
- * DESC
+ * This app is a sample app for the CSE program at ASU. The purpose of this app is to show good OO design required for
+ * effective unit testing. This app will be package with sample unit tests to illustrate good testing practices.
  *
  * @author     Jeremy Lindblom
  * @copyright  Copyright (c) 2011 Jeremy Lindblom
  */
 require 'classes/app.php';
-echo App::execute();
+$app = new App();
+echo $app->execute()->renderResponse();

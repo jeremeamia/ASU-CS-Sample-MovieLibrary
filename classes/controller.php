@@ -4,6 +4,7 @@ abstract class Controller
 {
 	protected $_request;
 	protected $_response;
+	protected $_container;
 
 	public static function factory(Request $request)
 	{
@@ -18,15 +19,18 @@ abstract class Controller
 	{
 		$this->_request = $request;
 		$this->_response = '';
+		$this->_container = $request->getContainer();
 	}
 
 	public function preExecute() {}
 
 	abstract public function execute();
 
+	public function postExecute() {}
+
 	public function getContainer()
 	{
-		return $this->_request->getContainer();
+		return $this->_container;
 	}
 
 	public function getRequest()

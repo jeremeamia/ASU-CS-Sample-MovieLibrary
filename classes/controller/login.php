@@ -15,7 +15,7 @@ class Controller_Login extends Controller_Page
 		{
 			$email = $this->_request->post('email');
 			$password = $this->_request->post('password');
-			$user = $this->getContainer()->build('model', 'user');
+			$user = $this->getContainer()->getModel('user');
 			if ($user->login($email, $password))
 			{
 				$this->_request->setUserMessage('success', 'You are now logged in!');
@@ -27,6 +27,6 @@ class Controller_Login extends Controller_Page
 			}
 		}
 
-		$this->setResponse($this->getContainer()->build('view', 'login'));
+		$this->setResponse($this->getContainer()->getView('login'));
 	}
 }

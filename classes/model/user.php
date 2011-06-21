@@ -15,8 +15,8 @@ class Model_User extends Model
 
 	public function __construct(Database $database, Config $config, Session $session)
 	{
-		$this->_session = $session;
 		parent::__construct($database, $config);
+		$this->_session = $session;
 	}
 
 	public function set($key, $value = NULL)
@@ -53,7 +53,7 @@ class Model_User extends Model
 
 	public function isAuthenticated()
 	{
-		return (bool) $this->_session->get('user.id');
+		return (bool) ($this->_session->get('user.id') == $this->get('id'));
 	}
 
 	protected function _hashPassword($password)

@@ -4,8 +4,9 @@ return array
 (
 	'site' => array
 	(
-		'base_uri' => '/',
-		'title'    => 'My Movie Library',
+		'base_uri'    => '/',
+		'title'       => 'My Movie Library',
+		'default_uri' => 'home',
 	),
 
 	'netflix' => array
