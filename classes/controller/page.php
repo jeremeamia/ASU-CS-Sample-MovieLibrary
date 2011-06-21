@@ -13,19 +13,20 @@ abstract class Controller_Page extends Controller
 		}
 	}
 
-	public function getResponse()
+	public function postExecute()
 	{
-		return $this->getContainer()->getView('page')
+		$content = $this->_response;
+		$this->_response = $this->_container->getView('page')
 			->set('title',   $this->_title)
-			->set('content', parent::getResponse())
+			->set('content', $content)
 			->set('message', $this->getMessage())
 			->render();
 	}
 
 	public function getUser()
 	{
-		$user = $this->getContainer()->getModel('user');
-		if ($logged_in_user_id = $this->getContainer()->getSession()->get('user.id'))
+		$user = $this->_container->getModel('user');
+		if ($logged_in_user_id = $this->_container->getSession()->get('user.id'))
 		{
 			$user->read($logged_in_user_id);
 		}
@@ -35,10 +36,7 @@ abstract class Controller_Page extends Controller
 
 	public function getMessage()
 	{
-		$message = $this->getRequest()->getUserMessage();
-		if (empty($message))
-			return FALSE;
-		else
-			return '<p class="message '.$message['type'].'">'.$message['message'].'</p>';
+		$message = $this->_request->getUserMessage();
+		return $message ? $message : NULL;
 	}
 }

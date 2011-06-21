@@ -8,10 +8,12 @@
 	<body style="font-family: sans-serif;">
 		<h1><?= $title ?></h1>
 
-		<?= $message ?>
+		<? if ($message): ?>
+			<p class="message <?= $message['type']?>"><?= $message['message'] ?></p>
+		<? endif; ?>
 
 		<hr />
-	
+
 		<?= $content ?>
 
 		<hr />
