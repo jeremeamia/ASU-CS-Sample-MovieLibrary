@@ -42,4 +42,42 @@ class Model_Movie extends Model
 		$results = $this->_database->query($sql);
 		return $this->_createModelsFromResults($results);
 	}
+
+	public function getMovieFromNetflix(Service_Netflix_Library $netflix, $netflix_id)
+	{
+		// Verify that the ID passed in is an integer
+		if ( ! ctype_digit(strval($netflix_id)))
+			return NULL;
+
+		// First, look it up in our system
+		$movie = $this->readFirst('`netflix_id` = "'.$netflix_id.'"');
+
+		if ($movie === NULL)
+		{
+			// If it doesn't exist in our system, let's check for it on Netflix
+			try
+			{
+				$netflix_movie = (array) $netflix->getMovie($netflix_id);
+			}
+			catch (Exception $ex)
+			{
+				$netflix_movie = array();
+			}
+
+			$movie = clone $this;
+			$movie->set($netflix_movie);
+			if ($movie->isValid())
+			{
+				// It existed on Netflix and returned valid data, let's add it
+				$movie->create();
+			}
+			else
+			{
+				// The movie could not be found or was invalid, sorry
+				$movie = NULL;
+			}
+		}
+
+		return $movie;
+	}
 }

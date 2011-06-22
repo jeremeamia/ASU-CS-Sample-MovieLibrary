@@ -75,9 +75,11 @@ class Service_Netflix_Library
 		$movie->title = $movie_data->title->regular;
 		$movie->year = $movie_data->release_year;
 		$movie->mpaa_rating = array_shift($movie_data->category)->label;
-		$movie->categories = array_map(function($category) {
-			return $category->label;
-		}, $movie_data->category);
+		$movie->categories = array();
+		foreach ($movie_data->category as $category)
+		{
+			$movie->categories[] = $category->label;
+		}
 		$movie->user_rating = $movie_data->average_rating;
 		$movie->box_art = $movie_data->box_art->large;
 		return $movie;
