@@ -72,6 +72,7 @@ abstract class Model
 	public function read($id)
 	{
 		$result = $this->_database->select($this->_table, $id);
+		$result = $result ? $result->fetch_assoc() : array();
 
 		return $this->populate($result);
 	}

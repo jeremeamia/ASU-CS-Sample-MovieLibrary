@@ -53,7 +53,8 @@ class Model_User extends Model
 
 	public function isAuthenticated()
 	{
-		return (bool) ($this->_session->get('user.id') == $this->get('id'));
+		$logged_in_id = $this->_session->get('user.id');
+		return (bool) ($logged_in_id == $this->get('id') AND $logged_in_id > 0);
 	}
 
 	protected function _hashPassword($password)

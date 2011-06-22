@@ -37,7 +37,7 @@ class Database
 	public function prepareValue($value, $type = NULL)
 	{
 		// Only allow scalar values (and DateTime) in the method
-		if ( ! is_scalar($value) AND ! $value instanceof DateTime)
+		if ( ! is_scalar($value) AND ! $value instanceof DateTime AND ! is_null($value))
 			throw new UnexpectedValueException('You cannot insert non-scalar values into the database.');
 
 		// Cast the value to the right type if it isn't already

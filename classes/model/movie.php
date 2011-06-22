@@ -45,10 +45,6 @@ class Model_Movie extends Model
 
 	public function getMovieFromNetflix(Service_Netflix_Library $netflix, $netflix_id)
 	{
-		// Verify that the ID passed in is an integer
-		if ( ! ctype_digit(strval($netflix_id)))
-			return NULL;
-
 		// First, look it up in our system
 		$movie = $this->readFirst('`netflix_id` = "'.$netflix_id.'"');
 
@@ -66,6 +62,7 @@ class Model_Movie extends Model
 
 			$movie = clone $this;
 			$movie->set($netflix_movie);
+
 			if ($movie->isValid())
 			{
 				// It existed on Netflix and returned valid data, let's add it
