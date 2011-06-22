@@ -75,11 +75,12 @@ abstract class Model
 
 	public function read($id)
 	{
-		$result = $this->_database->select($this->_table, $id);
-		$result = $result ? $result->fetch_assoc() : array();
-		$result = $result ? $result : array();
-
-		return $this->populate($result);
+		$results = $this->_database->select($this->_table, $id);
+		$row = $results->fetch_assoc();
+		@$results->free();
+		$row = $row ? $row : array();
+		
+		return $this->populate($row);
 	}
 
 	public function readAll($where = NULL, array $order_by = NULL, $limit = NULL, $offset = NULL)
@@ -94,7 +95,7 @@ abstract class Model
 		return $this->_createModelsFromResults($results);
 	}
 
-	public function readFirst($where = NULL, array $order_by = NULL, $limit = NULL, $offset = NULL)
+	public function readFirst($where = NULL, array $order_by = NULL, $limit = 1)
 	{
 		$results = $this->readAll($where, $order_by, $limit, $offset);
 		if (isset($results[0]))
@@ -105,7 +106,7 @@ abstract class Model
 
 	public function countAll($where = NULL)
 	{
-		return $this->_database->selectAll($this->_table, $where);
+		return $this->_database->countAll($this->_table, $where);
 	}
 
 	public function update()
@@ -208,14 +209,16 @@ abstract class Model
 		return $this;
 	}
 
-	protected function _createModelsFromResults(array $results)
+	protected function _createModelsFromResults(MySQLi_Result $results)
 	{
-		foreach ($results as & $result)
+		$models = array();
+		while ($row = $results->fetch_assoc())
 		{
 			$model = clone $this;
-			$result = $model->populate($result);
+			$models[] = $model->populate($row);
 		}
+		@$results->free();
 
-		return $results;
+		return $models;
 	}
 }

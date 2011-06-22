@@ -29,4 +29,10 @@ return array
 		'salt'     => 'YOUR HASH OPTIONS HERE', // A random string at least 10 chars long
 		'function' => 'YOUR HASH OPTIONS HERE', // sha1, md5, etc.
 	),
+	
+	'admin' => array
+	(
+		'username' => 'admin',
+		'password' => 'test',
+	),
 );

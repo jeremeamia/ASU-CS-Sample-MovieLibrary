@@ -3,6 +3,7 @@
 abstract class Controller_Page extends Controller
 {
 	protected $_title = NULL;
+	protected $_template = 'page';
 
 	public function preExecute()
 	{
@@ -16,7 +17,7 @@ abstract class Controller_Page extends Controller
 	public function postExecute()
 	{
 		$content = $this->_response;
-		$this->_response = $this->_container->getView('page')
+		$this->_response = $this->_container->getView($this->_template)
 			->set('title',   $this->_title)
 			->set('content', $content)
 			->set('message', $this->getMessage())

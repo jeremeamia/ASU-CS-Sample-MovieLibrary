@@ -6,7 +6,7 @@
 		<title><?= $title ?> - <?= $this->getConfigValue('site', 'title') ?></title>
 	</head>
 	<body style="font-family: sans-serif;">
-		<h1><?= $this->getHelper('html')->link($this->getConfigValue('site', 'title')) ?></h1>
+		<h1>Admin Tools <small>(<?= $this->getHelper('html')->link($this->getConfigValue('site', 'title')) ?>)</small></h1>
 		<h2><?= $title ?></h2>
 
 		<? if ($message): ?>

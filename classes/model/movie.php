@@ -38,9 +38,11 @@ class Model_Movie extends Model
 		}
 		$sql = rtrim($sql, ',').';';
 
-		// Retrieve and return results
+		// Retrieve results
 		$results = $this->_database->query($sql);
-		return $this->_createModelsFromResults($results);
+		$models = $this->_createModelsFromResults($results);
+		
+		return $models;
 	}
 
 	public function getMovieFromNetflix(Service_Netflix_Library $netflix, $netflix_id)

@@ -12,24 +12,10 @@ class Database
 	public function query($sql)
 	{
 		$type = current(explode(' ', $sql, 2));
-		$rows = $this->_connection->query($sql);
-
-		if ($type == 'SELECT')
-		{
-			if ($rows)
-			{
-				$result = $rows->fetch_all(MYSQLI_ASSOC);
-				$rows->close();
-			}
-			else
-			{
-				$result = array();
-			}
-		}
-		else
-		{
-			$result = (bool) $rows;
-		}
+		$result = $this->_connection->query($sql);
+		
+		if ($type == 'SELECT' AND empty($result))
+			throw new RuntimeException('The SQL query failed: <pre>'.$sql.'</pre>');
 
 		return $result;
 	}
@@ -88,7 +74,7 @@ class Database
 		$id  = is_numeric($id) ? intval($id) : 0;
 		$sql = 'SELECT * FROM `'.$table.'` WHERE `id` = '.$id;
 
-		$result = $this->_connection->query($sql);
+		$result = $this->query($sql);
 
 		return $result ? $result : NULL;
 	}
@@ -141,8 +127,12 @@ class Database
 			$sql .= ' WHERE '.$where;
 		}
 
-		// Execute SELECT query and COUNT
-		return count($this->query($sql));
+		// Execute SELECT query and count the rows
+		$result = $this->query($sql);
+		$count = $result->num_rows;
+		@$result->free();
+		
+		return $count;
 	}
 
 	public function insert($table, array $values)

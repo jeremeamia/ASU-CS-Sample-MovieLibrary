@@ -18,6 +18,11 @@ class Model_User extends Model
 		parent::__construct($database, $config);
 		$this->_session = $session;
 	}
+	
+	public function full_name()
+	{
+		return $this->get('first_name').' '.$this->get('last_name');
+	}
 
 	public function set($key, $value = NULL)
 	{
