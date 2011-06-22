@@ -2,10 +2,40 @@
 
 class Controller_Movie_Remove extends Controller_Page
 {
-	protected $_title = 'Lookup a Movie';
+	protected $_title = 'Remove a Movie';
 
 	public function execute()
 	{
-		// @TODO implement this
+		$movie = $this->getContainer()
+			->getModel('movie')
+			->read($this->getRequest()->getResourceId());
+
+		if ( ! $movie->isLoaded())
+		{
+			$this->getRequest()->setUserMessage('error', 'The movie you are trying to remove is not in your library.');
+			$this->getRequest()->redirect('home');
+		}
+
+		if ($this->getRequest()->post())
+		{
+			try
+			{
+				$this->getContainer()
+					->getModel('ownership')
+					->unlinkMovieFromUser($movie, $this->getUser());
+
+				$this->_request->setUserMessage('success', 'The movie "'.$movie->get('title').'" has been removed from your library.');
+				$this->_request->redirect('home');
+			}
+			catch (Exception $ex)
+			{
+				$this->_request->setUserMessage('error', 'The movie "'.$movie->get('title').'"could not be removed from your library. It was not in there to begin with.');
+				$this->_request->redirect('home');
+			}
+		}
+
+		$this->setResponse($this->getContainer()->getView('movie/remove')
+			->set('movie', $movie)
+		);
 	}
 }

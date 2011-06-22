@@ -66,6 +66,10 @@ abstract class Model
 			$this->_properties['id'] = $this->_database->lastInsertedId();
 		}
 
+		// Make it loaded
+		$this->_loaded = TRUE;
+		$this->_changed = array();
+
 		return $this;
 	}
 
@@ -73,6 +77,7 @@ abstract class Model
 	{
 		$result = $this->_database->select($this->_table, $id);
 		$result = $result ? $result->fetch_assoc() : array();
+		$result = $result ? $result : array();
 
 		return $this->populate($result);
 	}

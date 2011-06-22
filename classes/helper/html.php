@@ -26,4 +26,11 @@ class Helper_HTML extends Helper
 
 		return $html;
 	}
+
+	public function image($src, $alt, array $attributes = array())
+	{
+		$attributes['src'] = $src;
+		$attributes['alt'] = $alt;
+		return '<img'.$this->attributes($attributes).'>';
+	}
 }

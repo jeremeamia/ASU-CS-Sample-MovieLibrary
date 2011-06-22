@@ -5,7 +5,7 @@
 <strong>Movies in Library:</strong>
 <ul>
 	<? foreach ($movies as $movie): ?>
-		<li><?= $movie->get('title') ?> (<?= $movie->get('year') ?>)</li>
+		<li><?= $movie->get('title') ?> (<?= $movie->get('year') ?>) <?= $html->link('remove', 'movie/remove', $movie->get('id')) ?></li>
 	<? endforeach; ?>
-	<li><?= $html->link('+ Add a Movie', 'movie/add') ?></li>
+	<li><?= $html->link('+ Add a Movie', 'movie/lookup') ?></li>
 </ul>

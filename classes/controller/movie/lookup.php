@@ -2,10 +2,21 @@
 
 class Controller_Movie_Lookup extends Controller_Page
 {
-	protected $_title = 'Lookup a Movie';
+	protected $_title = 'Lookup a Movie to Add';
 
 	public function execute()
 	{
-		// @TODO implement this
+		$results = array();
+		if ($search = $this->_request->post('search'))
+		{
+			// Perform movie search via Netflix
+			$results = $this->getContainer()
+				->getNetflix()
+				->lookup($search);
+		}
+
+		$this->setResponse($this->getContainer()->getView('movie/lookup')
+			->set('results', $results)
+		);
 	}
 }

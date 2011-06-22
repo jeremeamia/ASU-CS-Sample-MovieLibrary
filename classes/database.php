@@ -86,7 +86,7 @@ class Database
 	public function select($table, $id)
 	{
 		$id  = is_numeric($id) ? intval($id) : 0;
-		$sql = 'SELECT * FROM `'.$table.'` WHERE id = '.$id;
+		$sql = 'SELECT * FROM `'.$table.'` WHERE `id` = '.$id;
 
 		$result = $this->_connection->query($sql);
 
@@ -168,7 +168,7 @@ class Database
 		{
 			$sql .= ' '.$key.' = '.$this->prepareValue($value).',';
 		}
-		$sql = rtrim($sql, ', ').' WHERE id = '.$id;
+		$sql = rtrim($sql, ', ').' WHERE `id` = '.$id;
 
 		// Execute the query and return success/failure
 		return $this->query($sql);
@@ -176,7 +176,7 @@ class Database
 
 	public function delete($table, $id)
 	{
-		$sql = 'DELETE FROM `'.$table.'` WHERE id = '.$this->_properties['id'];
+		$sql = 'DELETE FROM `'.$table.'` WHERE `id` = '.$id;
 		return $this->query($sql);
 	}
 

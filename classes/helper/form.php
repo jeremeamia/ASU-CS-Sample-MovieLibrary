@@ -16,7 +16,7 @@ class Helper_Form extends Helper
 		$attributes = array
 		(
 			'method' => 'post',
-			'action' => $action ? $action : $this->_request->currentUri(),
+			'action' => $action ? $this->_request->buildUri($action) : $this->_request->currentUri(),
 		);
 		return '<form'.$this->_html->attributes($attributes).'>';
 	}
