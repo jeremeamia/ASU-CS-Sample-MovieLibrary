@@ -19,7 +19,7 @@ class Model_User extends Model
 		$this->_session = $session;
 	}
 	
-	public function full_name()
+	public function getFullName()
 	{
 		return $this->get('first_name').' '.$this->get('last_name');
 	}

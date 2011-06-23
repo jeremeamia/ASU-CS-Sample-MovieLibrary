@@ -82,9 +82,13 @@ class Container
 	{
 		if ( ! isset($this->_cache['helpers']))
 		{
+			$request = $this->getRequest();
+			$html_helper = new Helper_HTML($request);
+
 			$helpers = new Helper_Collection();
-			$helpers->add('html', new Helper_HTML($this->getRequest()));
-			$helpers->add('form', new Helper_Form($this->getRequest(), $helpers->get('html')));
+			$helpers->addHelper('html', $html_helper);
+			$helpers->addHelper('form', new Helper_Form($request, $html_helper));
+
 			$this->_cache['helpers'] = $helpers;
 		}
 

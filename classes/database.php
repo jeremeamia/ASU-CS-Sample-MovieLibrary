@@ -130,7 +130,7 @@ class Database
 		// Execute SELECT query and count the rows
 		$result = $this->query($sql);
 		$count = $result->num_rows;
-		@$result->free();
+		$result->free();
 		
 		return $count;
 	}

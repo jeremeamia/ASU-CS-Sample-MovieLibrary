@@ -77,7 +77,7 @@ abstract class Model
 	{
 		$results = $this->_database->select($this->_table, $id);
 		$row = $results->fetch_assoc();
-		@$results->free();
+		$results->free();
 		$row = $row ? $row : array();
 		
 		return $this->populate($row);
@@ -217,7 +217,7 @@ abstract class Model
 			$model = clone $this;
 			$models[] = $model->populate($row);
 		}
-		@$results->free();
+		$results->free();
 
 		return $models;
 	}

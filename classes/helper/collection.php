@@ -9,14 +9,14 @@ class Helper_Collection
 		$this->_helpers = array();
 	}
 
-	public function add($name, Helper $helper)
+	public function addHelper($name, Helper $helper)
 	{
 		$this->_helpers[$name] = $helper;
 
 		return $this;
 	}
 
-	public function get($name)
+	public function getHelper($name)
 	{
 		return isset($this->_helpers[$name]) ? $this->_helpers[$name] : NULL;
 	}

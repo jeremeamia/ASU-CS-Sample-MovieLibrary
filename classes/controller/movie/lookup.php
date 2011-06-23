@@ -7,7 +7,7 @@ class Controller_Movie_Lookup extends Controller_Page
 	public function execute()
 	{
 		$results = array();
-		if ($search = $this->_request->post('search'))
+		if ($search = $this->getRequest()->post('search'))
 		{
 			// Perform movie search via Netflix
 			$results = $this->getContainer()

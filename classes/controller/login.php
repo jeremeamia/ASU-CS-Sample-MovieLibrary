@@ -8,22 +8,22 @@ class Controller_Login extends Controller_Page
 	{
 		if ($this->getUser()->isAuthenticated())
 		{
-			$this->_request->redirect('home');
+			$this->getRequest()->redirect('home');
 		}
 
-		if ($this->_request->post())
+		if ($this->getRequest()->post())
 		{
-			$email = $this->_request->post('email');
-			$password = $this->_request->post('password');
+			$email = $this->getRequest()->post('email');
+			$password = $this->getRequest()->post('password');
 			$user = $this->getContainer()->getUserModel();
 			if ($user->login($email, $password))
 			{
-				$this->_request->setUserMessage('success', 'You are now logged in!');
-				$this->_request->redirect('home');
+				$this->getRequest()->setUserMessage('success', 'You are now logged in!');
+				$this->getRequest()->redirect('home');
 			}
 			else
 			{
-				$this->_request->setUserMessage('error', 'There was a problem with your login credentials. Please try again.');
+				$this->getRequest()->setUserMessage('error', 'There was a problem with your login credentials. Please try again.');
 			}
 		}
 

@@ -24,13 +24,13 @@ class Controller_Movie_Remove extends Controller_Page
 					->getModel('ownership')
 					->unlinkMovieFromUser($movie, $this->getUser());
 
-				$this->_request->setUserMessage('success', 'The movie "'.$movie->get('title').'" has been removed from your library.');
-				$this->_request->redirect('home');
+				$this->getRequest()->setUserMessage('success', 'The movie "'.$movie->get('title').'" has been removed from your library.');
+				$this->getRequest()->redirect('home');
 			}
 			catch (Exception $ex)
 			{
-				$this->_request->setUserMessage('error', 'The movie "'.$movie->get('title').'"could not be removed from your library. It was not in there to begin with.');
-				$this->_request->redirect('home');
+				$this->getRequest()->setUserMessage('error', 'The movie "'.$movie->get('title').'"could not be removed from your library. It was not in there to begin with.');
+				$this->getRequest()->redirect('home');
 			}
 		}
 

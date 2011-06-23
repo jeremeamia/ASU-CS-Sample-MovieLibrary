@@ -4,12 +4,12 @@ class Controller_Movie_Add extends Controller_Page
 {
 	public function execute()
 	{
-		if ($this->_request->post())
+		if ($this->getRequest()->post())
 		{
 			$netflix = $this->getContainer()->getNetflix();
 
 			// Lookup chosen movie and add to library
-			if ($netflix_id = $this->_request->post('movie'))
+			if ($netflix_id = $this->getRequest()->post('movie'))
 			{
 				// Let's find the movie
 				$movie = $this->getContainer()
@@ -23,17 +23,17 @@ class Controller_Movie_Add extends Controller_Page
 						->getModel('ownership')
 						->linkMovieToUser($movie, $this->getUser());
 
-					$this->_request->setUserMessage('success', 'You have added the movie "'.$movie->get('title').'" was added to your library.');
-					$this->_request->redirect('home');
+					$this->getRequest()->setUserMessage('success', 'You have added the movie "'.$movie->get('title').'" was added to your library.');
+					$this->getRequest()->redirect('home');
 				}
 				else
 				{
-					$this->_request->setUserMessage('error', 'The movie could not be added to your library.');
-					$this->_request->redirect('movie/lookup');
+					$this->getRequest()->setUserMessage('error', 'The movie could not be added to your library.');
+					$this->getRequest()->redirect('movie/lookup');
 				}
 			}
 		}
 
-		$this->_request->redirect('movie/lookup');
+		$this->getRequest()->redirect('movie/lookup');
 	}
 }

@@ -23,7 +23,7 @@ class View
 
 	public function getHelper($name)
 	{
-		return $this->_helpers->get($name);
+		return $this->_helpers->getHelper($name);
 	}
 
 	public function getConfigValue($group_key, $key = NULL, $default = NULL)

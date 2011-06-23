@@ -16,11 +16,11 @@ class Controller_Admin_CreateUser extends Controller_Admin
 			{
 				$user->create();
 				
-				$this->_request->setUserMessage('success', 'There user, '.$user->full_name().', was added.');
+				$this->getRequest()->setUserMessage('success', 'There user, '.$user->getFullName().', was added.');
 			}
 			else
 			{
-				$this->_request->setUserMessage('error', 'There was a problem adding the user.');
+				$this->getRequest()->setUserMessage('error', 'There was a problem adding the user.');
 			}
 		}
 

@@ -16,18 +16,19 @@ abstract class Controller_Page extends Controller
 
 	public function postExecute()
 	{
-		$content = $this->_response;
-		$this->_response = $this->_container->getView($this->_template)
+		$content = $this->getResponse();
+		$this->setResponse($this->getContainer()->getView($this->_template)
 			->set('title',   $this->_title)
 			->set('content', $content)
 			->set('message', $this->getMessage())
-			->render();
+			->render()
+		);
 	}
 
 	public function getUser()
 	{
-		$user = $this->_container->getUserModel();
-		if ($logged_in_user_id = $this->_container->getSession()->get('user.id'))
+		$user = $this->getContainer()->getUserModel();
+		if ($logged_in_user_id = $this->getContainer()->getSession()->get('user.id'))
 		{
 			$user->read($logged_in_user_id);
 		}
@@ -37,7 +38,7 @@ abstract class Controller_Page extends Controller
 
 	public function getMessage()
 	{
-		$message = $this->_request->getUserMessage();
+		$message = $this->getRequest()->getUserMessage();
 		return $message ? $message : NULL;
 	}
 }
