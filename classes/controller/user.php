@@ -1,6 +1,6 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
 
-class Controller_Login extends Controller_Page
+class Controller_User extends Controller_Page
 {
 	public function actionLogin()
 	{
@@ -17,7 +17,7 @@ class Controller_Login extends Controller_Page
 			if ($user->login($email, $password))
 			{
 				$this->getRequest()->setUserMessage('success', 'You are now logged in!');
-				$this->getRequest()->redirect('movies/index');
+				$this->getRequest()->redirect('movie/index');
 			}
 			else
 			{

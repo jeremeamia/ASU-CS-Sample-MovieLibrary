@@ -7,7 +7,7 @@ abstract class Controller_Page extends Controller
 	public function beforeAction()
 	{
 		$user = $this->getUser();
-		if ( ! $user->isAuthenticated() AND ! $this instanceof Controller_Login)
+		if ( ! $user->isAuthenticated() AND $this->getRequest()->getAction() !== 'login')
 		{
 			$this->_request->redirect('user/login');
 		}
