@@ -1,0 +1,72 @@
+body {
+	font-size: 112.5%;
+	font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+}
+
+h1 {font-size: 250%;}
+h2 {font-size: 200%;}
+h3 {font-size: 150%;}
+h4 {font-size: 125%;}
+h5 {font-size: 100%;}
+h6 {font-size: 87.5%;}
+
+p {margin-bottom: 1em;}
+
+.wrapper {
+	width: 800px;
+	margin: 2em auto 1em;
+	background-color: #f4f4ff;
+	padding: 2em;
+
+	-moz-border-radius: 20px; /* FF1-3.6 */
+	-webkit-border-radius: 20px; /* Saf3-4, iOS 1-3.2, Android <1.6 */
+	border-radius: 20px; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */
+
+	background-repeat: repeat-x;
+	background-color: #f4f4ff;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ececf8), to(#f4f4ff)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #ececf8, #f4f4ff); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient(top, #ececf8, #f4f4ff); /* FF3.6 */
+	background-image:     -ms-linear-gradient(top, #ececf8, #f4f4ff); /* IE10 */
+	background-image:      -o-linear-gradient(top, #ececf8, #f4f4ff); /* Opera 11.10+ */
+	background-image:         linear-gradient(top, #ececf8, #f4f4ff);
+	          filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ececf8', EndColorStr='#f4f4ff'); /* IE6–IE9 */
+}
+
+header {
+	margin-bottom: 1.5em;
+	border-bottom: 1px #607890 solid;
+	padding-bottom: 1.5em;
+	position: relative;
+}
+footer {
+	margin-top: 1.5em;
+	border-top: 1px #607890 solid;
+	padding-top: 1.5em;
+}
+
+header aside.authentication-status {
+	position: absolute;
+	top: -65px;
+	right: 0;
+	color: #f4f4ff;
+}
+
+header aside.authentication-status a {
+	color: #aaaacc;
+}
+
+header aside.authentication-status a:hover {
+	color: #f4f4ff;
+}
+
+body {
+  background-color: #999999;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#666666), to(#999999)); /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(top, #666666, #999999); /* Chrome 10+, Saf5.1+ */
+  background-image:    -moz-linear-gradient(top, #666666, #999999); /* FF3.6 */
+  background-image:     -ms-linear-gradient(top, #666666, #999999); /* IE10 */
+  background-image:      -o-linear-gradient(top, #666666, #999999); /* Opera 11.10+ */
+  background-image:         linear-gradient(top, #666666, #999999);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#666666', EndColorStr='#999999'); /* IE6–IE9 */
+}

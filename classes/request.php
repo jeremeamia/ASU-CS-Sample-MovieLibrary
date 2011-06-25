@@ -29,7 +29,7 @@ class Request
 		{
 			// Create a controller using this request
 			$action = 'action'.ucfirst($this->_action);
-			$class = 'Controller_'.$this->_controller;
+			$class = 'Controller_'.ucfirst($this->_controller);
 			if ( ! class_exists($class) OR ! method_exists($class, $action))
 				throw new RequestException404();
 			$controller = new $class($this, $this->_container);
@@ -42,6 +42,8 @@ class Request
 		catch (RequestException404 $ex)
 		{
 			// Handle 500 errors
+			$this->_controller = 'error';
+			$this->_action = 'notfound';
 			$controller = new Controller_Error($this, $this->_container);
 			$controller->beforeAction();
 			$controller->actionNotfound();
@@ -50,6 +52,8 @@ class Request
 		catch (Exception $ex)
 		{
 			// Handle 500 errors
+			$this->_controller = 'error';
+			$this->_action = 'internal';
 			$controller = new Controller_Error($this, $this->_container);
 			$controller->beforeAction();
 			$controller->actionInternal();
@@ -57,7 +61,7 @@ class Request
 		}
 
 		// Send the response back to the App
-		return $controller->getResponse();
+		return $controller->getResponse()->render();
 	}
 
 	public function post($key = NULL, $default = NULL)
@@ -119,10 +123,12 @@ class Request
 	 */
 	public function buildUrl($uri = NULL, array $args = array())
 	{
-		if (is_array($uri))
+		if (is_array($uri) OR is_null($uri))
 		{
 			// Build an internal URL to our application
-			$uri = trim(implode('/', array_map('strval', $uri)), '/');
+			$uri = trim(implode('/', array_map('strval', (array) $uri)), '/');
+			$uri = $this->baseUrl().$uri;
+			//echo'<pre>';var_dump($uri);echo'</pre>';
 		}
 
 		// Append any args as a query string
@@ -131,12 +137,17 @@ class Request
 			$uri .= '?'.http_build_query($args);
 		}
 
-		return $this->_container->getConfig()->get('site', 'base_uri').$uri;
+		return $uri;
 	}
 
 	public function currentUrl()
 	{
 		return $this->buildUrl(array($this->_controller, $this->_action, $this->_resource_id), $this->_get);
+	}
+
+	public function baseUrl()
+	{
+		return $this->_container->getConfig()->get('site', 'base_uri');
 	}
 
 	/**
@@ -192,12 +203,6 @@ class Request
 		{
 			$uri = (string) substr($uri, strlen($base_uri));
 		}
-
-		// Remove the index file from the URI
-		//if (strpos($uri, 'index.php/') === 0)
-		//{
-		//	$uri = (string) substr($uri, strlen('index.php/'));
-		//}
 
 		// Now set the controller, action, and resource ID
 		$uri_parts = array_pad(explode('/', trim($uri, '/')), 3, NULL);

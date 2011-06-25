@@ -13,19 +13,17 @@ class Controller_User extends Controller_Page
 		{
 			$email = $this->getRequest()->post('email');
 			$password = $this->getRequest()->post('password');
-			$user = $this->getContainer()->getUserModel();
+			$user = $this->getContainer()->getModel('user');
 			if ($user->login($email, $password))
 			{
 				$this->getRequest()->setUserMessage('success', 'You are now logged in!');
-				$this->getRequest()->redirect('movie/index');
+				$this->getRequest()->redirect(array('movie', 'index'));
 			}
 			else
 			{
 				$this->getRequest()->setUserMessage('error', 'There was a problem with your login credentials. Please try again.');
 			}
 		}
-
-		$this->setResponse($this->getContainer()->getView('user/login'));
 	}
 
 	public function actionLogout()
@@ -33,6 +31,6 @@ class Controller_User extends Controller_Page
 		$this->getUser()->logout();
 
 		$this->getRequest()->setUserMessage('success', 'You are now logged out!');
-		$this->getRequest()->redirect('user/login');
+		$this->getRequest()->redirect(array('user', 'login'));
 	}
 }

@@ -1,4 +1,4 @@
-<? $form = $this->getHelper('form'); // Get Form helper ?>
+<? $form = $view->getHelper('form'); // Get Form helper ?>
 
 <p>Enter the user's information below:</p>
 

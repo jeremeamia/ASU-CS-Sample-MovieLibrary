@@ -8,9 +8,9 @@ class Controller_Movie extends Controller_Page
 			->getModel('movie')
 			->getMoviesOwnedByUser($this->getUser());
 
-		$this->setResponse($this->getContainer()->getView('movie/index')
-			->set('movies', $movies)
-		);
+		$this->view
+			->set('title', 'My Movies')
+			->set('movies', $movies);
 	}
 
 	public function actionLookup()
@@ -24,9 +24,9 @@ class Controller_Movie extends Controller_Page
 				->lookup($search);
 		}
 
-		$this->setResponse($this->getContainer()->getView('movie/lookup')
-			->set('results', $results)
-		);
+		$this->view
+			->set('title', 'Lookup a Movie')
+			->set('results', $results);
 	}
 
 	public function actionAdd()
@@ -51,12 +51,12 @@ class Controller_Movie extends Controller_Page
 						->linkMovieToUser($movie, $this->getUser());
 
 					$this->getRequest()->setUserMessage('success', 'You have added the movie "'.$movie->get('title').'" to your library.');
-					$this->getRequest()->redirect('movie/index');
+					$this->getRequest()->redirect(array('movie', 'index'));
 				}
 				else
 				{
 					$this->getRequest()->setUserMessage('error', 'The movie could not be added to your library.');
-					$this->getRequest()->redirect('movie/lookup');
+					$this->getRequest()->redirect(array('movie', 'lookup'));
 				}
 			}
 		}
@@ -73,7 +73,7 @@ class Controller_Movie extends Controller_Page
 		if ( ! $movie->isLoaded())
 		{
 			$this->getRequest()->setUserMessage('error', 'The movie you are trying to remove is not in your library.');
-			$this->getRequest()->redirect('movie/index');
+			$this->getRequest()->redirect(array('movie', 'index'));
 		}
 
 		if ($this->getRequest()->post())
@@ -85,17 +85,17 @@ class Controller_Movie extends Controller_Page
 					->unlinkMovieFromUser($movie, $this->getUser());
 
 				$this->getRequest()->setUserMessage('success', 'The movie "'.$movie->get('title').'" has been removed from your library.');
-				$this->getRequest()->redirect('movie/index');
+				$this->getRequest()->redirect(array('movie', 'index'));
 			}
 			catch (Exception $ex)
 			{
 				$this->getRequest()->setUserMessage('error', 'The movie "'.$movie->get('title').'"could not be removed from your library. It was not in there to begin with.');
-				$this->getRequest()->redirect('movie/index');
+				$this->getRequest()->redirect(array('movie', 'index'));
 			}
 		}
 
-		$this->setResponse($this->getContainer()->getView('movie/remove')
-			->set('movie', $movie)
-		);
+		$this->view
+			->set('title', 'Remove Movie')
+			->set('movie', $movie);
 	}
 }

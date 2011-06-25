@@ -29,12 +29,13 @@ abstract class Controller
 
 	public function getResponse()
 	{
-		return (string) $this->_response;
+		return $this->_response;
 	}
 
-	public function setResponse($response)
+	public function setResponse(View $view)
 	{
-		$this->_response = $response;
+		$this->_response = $view;
+		
 		return $this;
 	}
 }

@@ -44,7 +44,5 @@ class Controller_Admin extends Controller_Page
 				$this->getRequest()->setUserMessage('error', 'There was a problem adding the user.');
 			}
 		}
-
-		$this->setResponse($this->getContainer()->getView('admin/createuser'));
 	}
 }

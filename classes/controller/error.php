@@ -4,11 +4,11 @@ class Controller_Error extends Controller_Page
 {
 	public function actionInternal()
 	{
-		$this->setResponse($this->getContainer()->getView('error/internal'));
+		// Nothing to do. View has been set by Controller_Page.
 	}
 
 	public function actionNotfound()
 	{
-		$this->setResponse($this->getContainer()->getView('error/notfound'));
+		// Nothing to do. View has been set by Controller_Page.
 	}
 }

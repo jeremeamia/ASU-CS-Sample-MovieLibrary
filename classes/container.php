@@ -95,29 +95,28 @@ class Container
 		return $this->_cache['helpers'];
 	}
 
-	public function getView($file)
+	public function getView($template)
 	{
-		$view = new View($file, $this->getHelpers(), $this->getConfig());
-
-		return $view;
+		return new View($template, $this->getHelpers(), $this->getConfig());
 	}
 
-	public function getModel($type)
+	public function getModel($name)
 	{
-		// Find the class
-		$class = 'Model_'.$type;
+		// Get the model class and make sure it exists
+		$class = 'Model_'.ucfirst($name);
 		if ( ! class_exists($class))
-			throw new RuntimeException('The "'.$type.'" model does not exist.');
+			throw new RuntimeException('The "'.$name.'" model does not exist.');
 
-		$model = new $class($this->getDatabase(), $this->getConfig());
+		// Create an instance of the model
+		if ($name == 'user')
+		{
+			$model = new Model_User($this->getDatabase(), $this->getConfig(), $this->getSession());
+		}
+		else
+		{
+			$model = new $class($this->getDatabase(), $this->getConfig());
+		}
 
 		return $model;
-	}
-
-	public function getUserModel()
-	{
-		$user = new Model_User($this->getDatabase(), $this->getConfig(), $this->getSession());
-
-		return $user;
 	}
 }

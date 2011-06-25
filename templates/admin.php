@@ -3,10 +3,10 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title><?= $title ?> - <?= $this->getConfigValue('site', 'title') ?></title>
+		<title><?= $title ?> - <?= $view->getConfigValue('site', 'title') ?></title>
 	</head>
 	<body style="font-family: sans-serif;">
-		<h1>Admin Tools <small>(<?= $this->getHelper('html')->link($this->getConfigValue('site', 'title')) ?>)</small></h1>
+		<h1>Admin Tools <small>(<?= $view->getHelper('html')->link($view->getConfigValue('site', 'title')) ?>)</small></h1>
 		<h2><?= $title ?></h2>
 
 		<? if ($message): ?>

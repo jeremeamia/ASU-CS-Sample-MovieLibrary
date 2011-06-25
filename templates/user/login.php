@@ -1,4 +1,4 @@
-<? $form = $this->getHelper('form'); // Get Form helper ?>
+<? $form = $view->getHelper('form'); // Get Form helper ?>
 
 <p>Please login to access MyMovieLibrary!</p>
 

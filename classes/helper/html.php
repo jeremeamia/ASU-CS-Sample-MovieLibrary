@@ -33,4 +33,11 @@ class Helper_HTML extends Helper
 		$attributes['alt'] = $alt;
 		return '<img'.$this->attributes($attributes).'>';
 	}
+
+	public function stylesheet($href, $external = FALSE)
+	{
+		$attributes['rel'] = 'stylesheet';
+		$attributes['href'] = $external ? $href : $this->_request->baseUrl().$href;
+		return '<link'.$this->attributes($attributes).'>';
+	}
 }

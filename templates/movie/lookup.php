@@ -1,4 +1,4 @@
-<? $form = $this->getHelper('form'); // Get Form helper ?>
+<? $form = $view->getHelper('form'); // Get Form helper ?>
 
 <? if ($results): ?>
 	<p>We've looked up the closest matches for the movie title you entered. Please select the movie you would like to add to your library.</p>

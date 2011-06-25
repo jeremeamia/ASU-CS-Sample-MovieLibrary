@@ -1,5 +1,5 @@
-<? $html = $this->getHelper('html'); // Get HTML helper ?>
-<? $form = $this->getHelper('form'); // Get Form helper ?>
+<? $html = $view->getHelper('html'); // Get HTML helper ?>
+<? $form = $view->getHelper('form'); // Get Form helper ?>
 
 <p>Are you sure you want to remove the movie <i><?= $movie->get('title') ?></i> from your library?</p>
 

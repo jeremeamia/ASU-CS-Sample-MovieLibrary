@@ -3,28 +3,41 @@
 class View
 {
 	protected $_data;
-	protected $_file;
+	protected $_template;
 	protected $_helpers;
 	protected $_config;
 
-	public function __construct($file, Helper_Collection $helpers, Config $config)
+	public function __construct($template, Helper_Collection $helpers, Config $config)
 	{
 		$this->_data = array();
-		$this->_file = 'templates/'.$file.'.php';
+		$this->setTemplate($template);
 		$this->_helpers = $helpers;
 		$this->_config = $config;
+	}
+
+	public function setTemplate($template)
+	{
+		$this->_template = 'templates/'.trim($template, '/').'.php';
+
+		return $this;
 	}
 
 	public function set($key, $value)
 	{
 		$this->_data[$key] = $value;
+
 		return $this;
 	}
 
-	public function getHelper($name)
+	public function get($key, $default = NULL)
 	{
-		return $this->_helpers->getHelper($name);
+		return array_key_exists($key, $this->_data) ? $this->_data[$key] : $default;
 	}
+
+	public function getHelper($name)
+ 	{
+		return $this->_helpers->getHelper($name);
+ 	}
 
 	public function getConfigValue($group_key, $key = NULL, $default = NULL)
 	{
@@ -33,24 +46,18 @@ class View
 
 	public function render()
 	{
-		ob_start();
-		@extract($this->_data);
-		if ( ! file_exists($this->_file))
-			throw new Exception('The template file "'.$this->_file.'" does not exist.');
-		@include $this->_file;
-		return ob_get_clean();
+		$this->set('view', $this);
+		return View::_safeRender($this->_template, $this->_data);
 	}
 
-	public function __toString()
+	protected static function _safeRender($template, $data)
 	{
-		try
-		{
-			return $this->render();
-		}
-		catch (Exception $e)
-		{
-			// We must catch this exception because __toString cannot throw exceptions
-			return 'ERROR: '.$e->getMessage();
-		}
+		if ( ! file_exists($template))
+			throw new Exception('The template file "'.$template.'" does not exist.');
+
+		ob_start();
+		extract($data);
+		include $template;
+		return ob_get_clean();
 	}
 }
