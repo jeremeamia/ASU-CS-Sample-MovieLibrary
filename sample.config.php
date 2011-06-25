@@ -4,9 +4,10 @@ return array
 (
 	'site' => array
 	(
-		'base_uri'    => '/',
-		'title'       => 'My Movie Library',
-		'default_uri' => 'home',
+		'base_uri'           => '/',
+		'title'              => 'My Movie Library',
+		'default_controller' => 'movie',
+		'default_action'     => 'index',
 	),
 
 	'netflix' => array
@@ -29,7 +30,7 @@ return array
 		'salt'     => 'YOUR HASH OPTIONS HERE', // A random string at least 10 chars long
 		'function' => 'YOUR HASH OPTIONS HERE', // sha1, md5, etc.
 	),
-	
+
 	'admin' => array
 	(
 		'username' => 'admin',

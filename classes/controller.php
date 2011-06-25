@@ -6,18 +6,16 @@ abstract class Controller
 	protected $_response;
 	protected $_container;
 
-	public function __construct(Request $request)
+	public function __construct(Request $request, Container $container)
 	{
 		$this->_request = $request;
 		$this->_response = '';
-		$this->_container = $request->getContainer();
+		$this->_container = $container;
 	}
 
-	public function preExecute() {}
+	public function beforeAction() {}
 
-	abstract public function execute();
-
-	public function postExecute() {}
+	public function afterAction() {}
 
 	public function getContainer()
 	{
@@ -29,14 +27,14 @@ abstract class Controller
 		return $this->_request;
 	}
 
+	public function getResponse()
+	{
+		return (string) $this->_response;
+	}
+
 	public function setResponse($response)
 	{
 		$this->_response = $response;
 		return $this;
-	}
-
-	public function getResponse()
-	{
-		return (string) $this->_response;
 	}
 }

@@ -1,5 +1,7 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
 
+class RequestException404 extends Exception {}
+
 class Request
 {
 	protected $_container;
@@ -7,6 +9,7 @@ class Request
 	protected $_get;
 	protected $_cookie;
 	protected $_controller;
+	protected $_action;
 	protected $_resource_id;
 
 	public function __construct(Container $container)
@@ -22,36 +25,35 @@ class Request
 
 	public function execute()
 	{
-		// Create a controller using this request
-		$controller = NULL;
-		$class = 'Controller_'.str_replace('/', '_', $this->_controller);
-		if (class_exists($class))
-		{
-			$controller = new $class($this);
-		}
-
-		// Handle 404 errors
-		if ($controller == NULL)
-		{
-			$this->_controller = 'error/notfound';
-			$controller = new Controller_Error_NotFound($this);
-		}
-
 		try
 		{
+			// Create a controller using this request
+			$action = 'action'.ucfirst($this->_action);
+			$class = 'Controller_'.$this->_controller;
+			if ( ! class_exists($class) OR ! method_exists($class, $action))
+				throw new RequestException404();
+			$controller = new $class($this, $this->_container);
+
 			// Execute the request
-			$controller->preExecute();
-			$controller->execute();
-			$controller->postExecute();
+			$controller->beforeAction();
+			$controller->{$action}();
+			$controller->afterAction();
+		}
+		catch (RequestException404 $ex)
+		{
+			// Handle 500 errors
+			$controller = new Controller_Error($this, $this->_container);
+			$controller->beforeAction();
+			$controller->actionNotfound();
+			$controller->afterAction();
 		}
 		catch (Exception $ex)
 		{
 			// Handle 500 errors
-			$this->_controller = 'error/internal';
-			$controller = new Controller_Error_Internal($this);
-			$controller->preExecute();
-			$controller->execute();
-			$controller->postExecute();
+			$controller = new Controller_Error($this, $this->_container);
+			$controller->beforeAction();
+			$controller->actionInternal();
+			$controller->afterAction();
 		}
 
 		// Send the response back to the App
@@ -81,6 +83,11 @@ class Request
 		return $this->_controller;
 	}
 
+	public function getAction()
+	{
+		return $this->_action;
+	}
+
 	public function getResourceId()
 	{
 		return $this->_resource_id;
@@ -105,28 +112,17 @@ class Request
 	}
 
 	/**
-	 * Construct an absolute url pointing to an internal resource
+	 * Construct an absolute url pointing to an internal or external resource
 	 *
-	 * @param	string	$controller
-	 * @param	string	$id
+	 * @param	mixed	$uri
 	 * @return	string
 	 */
-	public function buildUri($controller = NULL, $id = NULL, array $args = array())
+	public function buildUrl($uri = NULL, array $args = array())
 	{
-		if (strpos($controller, '://') === FALSE)
+		if (is_array($uri))
 		{
 			// Build an internal URL to our application
-			$uri = (string) $controller;
-			if ($id)
-			{
-				$uri .= '/'.$id;
-			}
-			$uri = $this->_container->getConfig()->get('site', 'base_uri').$uri;
-		}
-		else
-		{
-			// Treat the argument like an external URL
-			$uri = $controller;
+			$uri = trim(implode('/', array_map('strval', $uri)), '/');
 		}
 
 		// Append any args as a query string
@@ -135,23 +131,23 @@ class Request
 			$uri .= '?'.http_build_query($args);
 		}
 
-		return $uri;
+		return $this->_container->getConfig()->get('site', 'base_uri').$uri;
 	}
 
-	public function currentUri()
+	public function currentUrl()
 	{
-		return $this->buildUri($this->_controller, $this->_resource_id, $this->_get);
+		return $this->buildUrl(array($this->_controller, $this->_action, $this->_resource_id), $this->_get);
 	}
 
 	/**
 	 * Redirect the request to a different URL
 	 *
-	 * @param	string	$controller
+	 * @param	mixed	$uri
 	 * @param	string	$id
 	 */
-	public function redirect($controller = NULL, $id = NULL)
+	public function redirect($uri)
 	{
-		$url = $this->buildUri($controller, $id);
+		$url = $this->buildUrl($uri);
 		header('Location: '.$url);
 		exit;
 	}
@@ -198,26 +194,16 @@ class Request
 		}
 
 		// Remove the index file from the URI
-		if (strpos($uri, 'index.php/') === 0)
-		{
-			$uri = (string) substr($uri, strlen('index.php/'));
-		}
+		//if (strpos($uri, 'index.php/') === 0)
+		//{
+		//	$uri = (string) substr($uri, strlen('index.php/'));
+		//}
 
-		// If the URI is empty, then we'll use the default
-		if (empty($uri))
-		{
-			$uri = $this->_container->getConfig()->get('site', 'default_uri', 'home');
-		}
-
-		// Now set the controller and resource ID
-		if (preg_match('/^([^0-9]+)(\/[0-9]+\/?)?$/', $uri, $matches))
-		{
-			$this->_controller = trim($matches[1], '/');
-			$this->_resource_id = isset($matches[2]) ? trim($matches[2], '/') : NULL;
-		}
-		else
-		{
-			$this->_controller = $this->_resource_id = NULL;
-		}
+		// Now set the controller, action, and resource ID
+		$uri_parts = array_pad(explode('/', trim($uri, '/')), 3, NULL);
+		$config = $this->_container->getConfig();
+		$this->_controller = $uri_parts[0] ? $uri_parts[0] : $config->get('site', 'default_controller');
+		$this->_action = $uri_parts[1] ? $uri_parts[1] : $config->get('site', 'default_action');
+		$this->_resource_id = $uri_parts[2];
 	}
 }

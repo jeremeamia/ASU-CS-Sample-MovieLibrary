@@ -2,13 +2,11 @@
 
 class Controller_Login extends Controller_Page
 {
-	protected $_title = 'Login';
-
-	public function execute()
+	public function actionLogin()
 	{
 		if ($this->getUser()->isAuthenticated())
 		{
-			$this->getRequest()->redirect('home');
+			$this->getRequest()->redirect('movies/index');
 		}
 
 		if ($this->getRequest()->post())
@@ -19,7 +17,7 @@ class Controller_Login extends Controller_Page
 			if ($user->login($email, $password))
 			{
 				$this->getRequest()->setUserMessage('success', 'You are now logged in!');
-				$this->getRequest()->redirect('home');
+				$this->getRequest()->redirect('movies/index');
 			}
 			else
 			{
@@ -27,6 +25,14 @@ class Controller_Login extends Controller_Page
 			}
 		}
 
-		$this->setResponse($this->getContainer()->getView('login'));
+		$this->setResponse($this->getContainer()->getView('user/login'));
+	}
+
+	public function actionLogout()
+	{
+		$this->getUser()->logout();
+
+		$this->getRequest()->setUserMessage('success', 'You are now logged out!');
+		$this->getRequest()->redirect('user/login');
 	}
 }

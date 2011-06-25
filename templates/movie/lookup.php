@@ -4,7 +4,7 @@
 	<p>We've looked up the closest matches for the movie title you entered. Please select the movie you would like to add to your library.</p>
 
 	<div form="form-container" id="movie_lookup_form">
-		<?= $form->open('movie/add') ?>
+		<?= $form->open(array('movie', 'add')) ?>
 			<? foreach ($results as $movie): ?>
 			<div class="form-field" style="display: inline-block; margin: 10px;">
 				<?= $movie->title ?> (<?= $movie->year ?>) [<?= $movie->mpaa_rating ?>]<br>

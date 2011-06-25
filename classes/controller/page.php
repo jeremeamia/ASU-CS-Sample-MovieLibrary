@@ -2,25 +2,23 @@
 
 abstract class Controller_Page extends Controller
 {
-	protected $_title = NULL;
 	protected $_template = 'page';
 
-	public function preExecute()
+	public function beforeAction()
 	{
 		$user = $this->getUser();
 		if ( ! $user->isAuthenticated() AND ! $this instanceof Controller_Login)
 		{
-			$this->_request->redirect('login');
+			$this->_request->redirect('user/login');
 		}
 	}
 
-	public function postExecute()
+	public function afterAction()
 	{
-		$content = $this->getResponse();
 		$this->setResponse($this->getContainer()->getView($this->_template)
-			->set('title',   $this->_title)
-			->set('content', $content)
-			->set('message', $this->getMessage())
+			->set('title',   'TEMPORARY')
+			->set('content', $this->getResponse())
+			->set('message', $this->getRequest()->getUserMessage())
 			->render()
 		);
 	}
@@ -34,11 +32,5 @@ abstract class Controller_Page extends Controller
 		}
 
 		return $user;
-	}
-
-	public function getMessage()
-	{
-		$message = $this->getRequest()->getUserMessage();
-		return $message ? $message : NULL;
 	}
 }

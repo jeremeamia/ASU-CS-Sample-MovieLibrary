@@ -11,12 +11,12 @@ class Helper_Form extends Helper
 		$this->_html = $html;
 	}
 
-	public function open($action = NULL)
+	public function open($uri = NULL)
 	{
 		$attributes = array
 		(
 			'method' => 'post',
-			'action' => $action ? $this->_request->buildUri($action) : $this->_request->currentUri(),
+			'action' => $uri ? $this->_request->buildUrl($uri) : $this->_request->currentUrl(),
 		);
 		return '<form'.$this->_html->attributes($attributes).'>';
 	}

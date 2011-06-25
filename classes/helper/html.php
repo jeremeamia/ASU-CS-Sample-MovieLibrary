@@ -9,10 +9,10 @@ class Helper_HTML extends Helper
 		$this->_request = $request;
 	}
 
-	public function link($text, $controller = NULL, $id = NULL, array $attributes = array())
+	public function link($text, $uri = NULL, array $attributes = array())
 	{
-		$uri = $this->_request->buildUri($controller, $id);
-		$attributes['href'] = $uri;
+		$url = $this->_request->buildUrl($uri);
+		$attributes['href'] = $url;
 		return '<a'.$this->attributes($attributes).'>'.$text.'</a>';
 	}
 

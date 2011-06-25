@@ -9,7 +9,7 @@
 	<?= $form->open() ?>
 		<div class="form-buttons">
 			<?= $form->button('submit', 'submit', 'Remove '.$movie->get('title')) ?>
-			<?= $html->link('Cancel', 'home') ?>
+			<?= $html->link('Cancel', array('movie', 'index')) ?>
 		</div>
 	<?= $form->close() ?>
 </div>
