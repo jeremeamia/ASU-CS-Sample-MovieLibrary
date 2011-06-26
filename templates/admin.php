@@ -4,21 +4,34 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title><?= $title ?> - <?= $view->getConfigValue('site', 'title') ?></title>
+		<?= $view->getHelper('html')->stylesheet('assets/css/boilerplate.css') ?>
+		<?= $view->getHelper('html')->stylesheet('assets/css/styles.css') ?>
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
 	</head>
-	<body style="font-family: sans-serif;">
-		<h1>Admin Tools <small>(<?= $view->getHelper('html')->link($view->getConfigValue('site', 'title')) ?>)</small></h1>
-		<h2><?= $title ?></h2>
+	<body class="<?= $class ?>">
+		<div class="wrapper">
+			<header>
+				<hgroup class="titles">
+					<h1>Admin - <?= $view->getHelper('html')->link($view->getConfigValue('site', 'title')) ?></h1>
+					<h2><?= $title ?></h2>
+				</hgroup>
 
-		<? if ($message): ?>
-			<p class="message <?= $message['type']?>"><?= $message['message'] ?></p>
-		<? endif; ?>
+				<? if ($message): ?>
+					<p class="message <?= $message['type']?>"><?= $message['message'] ?></p>
+				<? endif; ?>
+			</header>
 
-		<hr />
+			<section class="main" role="main">
+				<?= $content ?>
+			</section>
 
-		<?= $content ?>
+			<footer>
+				<p class="copyright">Copyright &copy; 2011 <?= $view->getHelper('html')->link('Jeremy Lindblom', 'http://github.com/jeremeamia') ?>. For the use of the ASU CSE department.</p>
+			</footer>
+		</div>
 
-		<hr />
-
-		<p>Copyright &copy; 2011 Jeremy Lindblom.</p>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 	</body>
 </html>

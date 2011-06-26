@@ -24,6 +24,9 @@ class Controller_Admin extends Controller_Page
 			echo 'You cannot access the Admin Tools for '.$config->get('site', 'title').'.';
 			exit(0);
 		}
+
+		// Create a view class that corresponds to this request
+		$this->view = $this->getContainer()->getView($this->getAction());
 	}
 
 	public function actionCreateuser()
@@ -31,7 +34,7 @@ class Controller_Admin extends Controller_Page
 		if ($data = $this->getRequest()->post())
 		{
 			$user = $this->getContainer()
-				->getUserModel()
+				->getModel('user')
 				->set($data);
 
 			if ($user->isValid())
