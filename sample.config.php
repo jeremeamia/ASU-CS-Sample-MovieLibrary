@@ -14,7 +14,7 @@ return array
 	(
 		'api_key'     => 'YOUR NETFLIX CREDENTIALS HERE',
 		'secret_key'  => 'YOUR NETFLIX CREDENTIALS HERE',
-		'max_results' => 8,
+		'max_results' => 9,
 	),
 
 	'database' => array

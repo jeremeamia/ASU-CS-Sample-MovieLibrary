@@ -51,22 +51,84 @@ header aside.authentication-status {
 	right: 0;
 	color: #f4f4ff;
 }
-
 header aside.authentication-status a {
 	color: #aaaacc;
 }
-
 header aside.authentication-status a:hover {
 	color: #f4f4ff;
 }
 
 body {
-  background-color: #999999;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#666666), to(#999999)); /* Saf4+, Chrome */
-  background-image: -webkit-linear-gradient(top, #666666, #999999); /* Chrome 10+, Saf5.1+ */
-  background-image:    -moz-linear-gradient(top, #666666, #999999); /* FF3.6 */
-  background-image:     -ms-linear-gradient(top, #666666, #999999); /* IE10 */
-  background-image:      -o-linear-gradient(top, #666666, #999999); /* Opera 11.10+ */
-  background-image:         linear-gradient(top, #666666, #999999);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#666666', EndColorStr='#999999'); /* IE6–IE9 */
+	min-height: 600px;
+	background-color: #999999;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#666666), to(#999999)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient(top, #666666, #999999); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient(top, #666666, #999999); /* FF3.6 */
+	background-image:     -ms-linear-gradient(top, #666666, #999999); /* IE10 */
+	background-image:      -o-linear-gradient(top, #666666, #999999); /* Opera 11.10+ */
+	background-image:         linear-gradient(top, #666666, #999999);
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#666666', EndColorStr='#999999'); /* IE6–IE9 */
+}
+
+.message {
+	margin: 0.5em 0 0 0;
+	padding: 0.5em;
+	border: 1px #ffffff solid;
+	background-color: #f8f8ff;
+
+	-moz-border-radius: 20px; /* FF1-3.6 */
+	-webkit-border-radius: 20px; /* Saf3-4, iOS 1-3.2, Android <1.6 */
+	border-radius: 20px; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */
+}
+.message.error {
+	border-color: #cc0000;
+	background-color: #ffeeee;
+}
+.message.success {
+	border-color: #00cc00;
+	background-color: #eeffee;
+}
+
+.form-field {
+	margin-bottom: 1em;
+}
+.form-field label {
+	display: inline-block;
+	width: 120px;
+}
+input[type=text], input[type=password] {
+	-moz-border-radius: 5px; /* FF1-3.6 */
+	-webkit-border-radius: 5px; /* Saf3-4, iOS 1-3.2, Android <1.6 */
+	border-radius: 5px; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */
+
+	-moz-box-shadow: 0px 0px 4px #ffffff; /* FF3.5+ */
+	-webkit-box-shadow: 0px 0px 4px #ffffff; /* Saf3.0+, Chrome */
+	box-shadow: 0px 0px 4px #ffffff; /* Opera 10.5, IE9, Chrome 10+ */
+}
+
+#movie_select_form {
+	margin-bottom: 1em;
+}
+#movie_select_form .form-field {
+	display: inline-block;
+	width: 240px;
+	font-size: 87.5%;
+}
+#movie_select_form .form-field .movie-title {
+	font-weight: bold;
+	margin-bottom: 0.5em;
+}
+#movie_select_form .form-field .movie-art {
+	float: left;
+	padding-right: 0.5em;
+}
+#movie_select_form .form-field .movie-year,
+#movie_select_form .form-field .movie-mpaa,
+#movie_select_form .form-field .movie-rating {
+	margin-bottom: 0.5em;
+}
+#movie_select_form .form-field span {
+	display: inline-block;
+	width: 60px;
+	color: #999;
 }

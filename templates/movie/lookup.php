@@ -3,12 +3,15 @@
 <? if ($results): ?>
 	<p>We've looked up the closest matches for the movie title you entered. Please select the movie you would like to add to your library.</p>
 
-	<div form="form-container" id="movie_lookup_form">
+	<div form="form-container" id="movie_select_form">
 		<?= $form->open(array('movie', 'add')) ?>
 			<? foreach ($results as $movie): ?>
 			<div class="form-field" style="display: inline-block; margin: 10px;">
-				<?= $movie->title ?> (<?= $movie->year ?>) [<?= $movie->mpaa_rating ?>]<br>
-				<?= $form->image('movie', $movie->box_art, $movie->netflix_id, $movie->title) ?>
+				<div class="movie-title"><?= str_replace(': ', ':<br>', $movie->title) ?></div>
+				<div class="movie-art"><?= $form->image('movie', $movie->box_art, $movie->netflix_id, $movie->title) ?></div>
+				<div class="movie-year"><span>Year</span><?= $movie->year ?></div>
+				<div class="movie-mpaa"><span>MPAA</span><?= $movie->mpaa_rating ?></div>
+				<div class="movie-rating"><span>Rating</span><?= $movie->user_rating ?></div>
 			</div>
 			<? endforeach; ?>
 		<?= $form->close() ?>

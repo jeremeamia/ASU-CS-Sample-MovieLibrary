@@ -24,15 +24,11 @@
 						You are logged in as <?= $user->getFullName() ?>.
 						( <?= $view->getHelper('html')->link('log out', array('user' ,'logout')) ?> )
 					</p>
-				<? else: ?>
-					<p>Please login.</p>
 				<? endif; ?>
 				</aside>
 
 				<? if ($message): ?>
-					<div class="messages">
-						<p class="message <?= $message['type']?>"><?= $message['message'] ?></p>
-					</div>
+					<p class="message <?= $message['type']?>"><?= $message['message'] ?></p>
 				<? endif; ?>
 			</header>
 
