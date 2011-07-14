@@ -6,30 +6,30 @@ Mock::generate('Helper');
 
 class Test_Helper_Collection extends UnitTestCase
 {
-	public $helpers;
+	public $helper_collection;
 
 	public function setUp()
 	{
-		$this->helpers = new Helper_Collection();
+		$this->helper_collection = new Helper_Collection();
 	}
 
 	public function tearDown()
 	{
-		unset($this->helpers);
+		unset($this->helper_collection);
 	}
 
 	public function testAddHelper()
 	{
 		$helper = new MockHelper();
-		$result = $this->helpers->addHelper('test', $helper);
-		$this->assertReference($result, $this->helpers);
+		$result = $this->helper_collection->addHelper('test', $helper);
+		$this->assertReference($result, $this->helper_collection);
 	}
 
 	public function testGetHelper()
 	{
 		$helper = new MockHelper();
-		$this->helpers->addHelper('test', $helper);
-		$result = $this->helpers->getHelper('test');
+		$this->helper_collection->addHelper('test', $helper);
+		$result = $this->helper_collection->getHelper('test');
 		$this->assertReference($result, $helper);
 	}
 }
