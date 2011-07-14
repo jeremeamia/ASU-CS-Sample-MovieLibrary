@@ -13,6 +13,7 @@ class MovieLibraryTests extends TestSuite
 
 		// Add the unit test classes
 		$this->loadTestFor('Helper_Collection');
+		$this->loadTestFor('Helper_HTML');
 	}
 
 	// Helper method that determines the test file for class and adds it
