@@ -128,7 +128,6 @@ class Request
 			// Build an internal URL to our application
 			$uri = trim(implode('/', array_map('strval', (array) $uri)), '/');
 			$uri = $this->baseUrl().$uri;
-			//echo'<pre>';var_dump($uri);echo'</pre>';
 		}
 
 		// Append any args as a query string

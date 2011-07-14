@@ -29,15 +29,15 @@ class Helper_HTML extends Helper
 
 	public function image($src, $alt, array $attributes = array())
 	{
-		$attributes['src'] = $src;
+		$attributes['src'] = (strpos($src, 'http') === 0) ? $src : $this->_request->baseUrl().$src;
 		$attributes['alt'] = $alt;
 		return '<img'.$this->attributes($attributes).'>';
 	}
 
-	public function stylesheet($href, $external = FALSE)
+	public function stylesheet($href)
 	{
 		$attributes['rel'] = 'stylesheet';
-		$attributes['href'] = $external ? $href : $this->_request->baseUrl().$href;
+		$attributes['href'] = (strpos($href, 'http') === 0) ? $href : $this->_request->baseUrl().$href;
 		return '<link'.$this->attributes($attributes).'>';
 	}
 }
