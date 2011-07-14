@@ -30,7 +30,7 @@ class App
 	public static function load($class)
 	{
 		// Determine the class's path
-		$file = 'classes/'.str_replace('_', '/', strtolower($class)).'.php';
+		$file = dirname(__FILE__).'/'.str_replace('_', '/', strtolower($class)).'.php';
 
 		// Load the file
 		if (file_exists($file))
