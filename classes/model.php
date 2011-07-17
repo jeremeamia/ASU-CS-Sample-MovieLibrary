@@ -97,7 +97,7 @@ abstract class Model
 
 	public function readFirst($where = NULL, array $order_by = NULL, $limit = 1)
 	{
-		$results = $this->readAll($where, $order_by, $limit, $offset);
+		$results = $this->readAll($where, $order_by, $limit);
 		if (isset($results[0]))
 			return $results[0];
 		else

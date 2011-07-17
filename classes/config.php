@@ -9,7 +9,7 @@ class Config
 		if ( ! $file->isFile())
 			throw new RuntimeException('The config.php file is missing from the application root.');
 
-		$data = @include($file->getPathname());
+		$data = include $file->getPathname();
 
 		if ( ! is_array($data))
 			throw new RuntimeException('The config.php file did not return an array configuration settings.');
