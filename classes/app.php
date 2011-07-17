@@ -4,7 +4,7 @@ class App
 {
 	const NAME = 'MyMovieLibrary';
 
-	protected $_response = NULL;
+	protected $_output = NULL;
 
 	public function execute()
 	{
@@ -17,14 +17,14 @@ class App
 
 		// Create the request (via the container) that will process the URL, find the appropriate controller, and execute it
 		$request = $container->getRequest();
-		$this->_response = $request->execute();
+		$this->_output = $request->execute();
 
 		return $this;
 	}
 
-	public function renderResponse()
+	public function renderOutput()
 	{
-		return (string) $this->_response;
+		return (string) $this->_output;
 	}
 
 	public static function load($class)

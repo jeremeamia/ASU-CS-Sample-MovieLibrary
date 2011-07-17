@@ -10,6 +10,7 @@
  * @author     Jeremy Lindblom
  * @copyright  Copyright (c) 2011 Jeremy Lindblom
  */
+error_reporting(-1);
 require 'classes/app.php';
 $app = new App();
-echo $app->execute()->renderResponse();
+echo $app->execute()->renderOutput();
