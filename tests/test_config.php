@@ -25,11 +25,11 @@ class Test_Config extends UnitTestCase
 		unlink($this->file);
 	}
 
-	public function testGet()
+	public function testGettingValuesFromConfig()
 	{
 		$config = new Config(new SplFileInfo($this->file));
 
-		// Test values that exist
+		// Test keys that exist
 		foreach ($this->values as $group => $items)
 		{
 			foreach ($items as $key => $value)
@@ -39,13 +39,15 @@ class Test_Config extends UnitTestCase
 			}
 		}
 
-		// Test values that do not exist
+		// Test key that does not exist
 		$result = $config->get('test', 'ddd');
 		$this->assertNull($result);
 
+		// Test group that does not exist
 		$result = $config->get('foo', 'aaa');
 		$this->assertNull($result);
 
+		// Test the default (or fallback) functionality
 		$result = $config->get('test', 'ddd', 'foo');
 		$this->assertEqual($result, 'foo');
 	}

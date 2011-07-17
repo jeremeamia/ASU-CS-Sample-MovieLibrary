@@ -18,14 +18,14 @@ class Test_Helper_Collection extends UnitTestCase
 		unset($this->helper_collection);
 	}
 
-	public function testAddHelper()
+	public function testAddingHelperToCollection()
 	{
 		$helper = new MockHelper();
 		$result = $this->helper_collection->addHelper('test', $helper);
 		$this->assertReference($result, $this->helper_collection);
 	}
 
-	public function testGetHelper()
+	public function testGettingHelperFromCollection()
 	{
 		$helper = new MockHelper();
 		$this->helper_collection->addHelper('test', $helper);

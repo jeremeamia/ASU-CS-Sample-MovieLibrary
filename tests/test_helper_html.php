@@ -23,7 +23,7 @@ class Test_Helper_HTML extends UnitTestCase
 		unset($this->html_helper);
 	}
 
-	public function testAttributes()
+	public function testBuildingAttributesFromArrays()
 	{
 		$result = $this->html_helper->attributes(array('id' => 'unique_id', 'class' => 'example'));
 		$this->assertEqual($result, ' id="unique_id" class="example"');
@@ -35,7 +35,7 @@ class Test_Helper_HTML extends UnitTestCase
 		$this->assertEqual($result, '');
 	}
 
-	public function testLink()
+	public function testGeneratingHtmlForLinks()
 	{
 		$result = $this->html_helper->link('http://example.com');
 		$this->assertEqual($result, '<a href="http://example.com/">http://example.com</a>');
@@ -47,7 +47,7 @@ class Test_Helper_HTML extends UnitTestCase
 		$this->assertEqual($result, '<a class="example" href="http://example.com/controller/action/id">Example</a>');
 	}
 
-	public function testImage()
+	public function testGeneratingHtmlForImages()
 	{
 		$result = $this->html_helper->image('http://google.com/logo.png', 'Logo');
 		$this->assertEqual($result, '<img src="http://google.com/logo.png" alt="Logo">');
@@ -59,7 +59,7 @@ class Test_Helper_HTML extends UnitTestCase
 		$this->assertEqual($result, '<img class="example" src="http://example.com/assets/logo.png" alt="Logo">');
 	}
 
-	public function testStylesheet()
+	public function testGeneratingHtmlForIncludingStylesheets()
 	{
 		$result = $this->html_helper->stylesheet('http://google.com/style.css');
 		$this->assertEqual($result, '<link rel="stylesheet" href="http://google.com/style.css">');
