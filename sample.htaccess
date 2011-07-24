@@ -1,3 +1,6 @@
+# Turn short tags on (for templates)
+php_flag short_open_tag on
+
 # Turn on URL rewriting
 RewriteEngine On
 
@@ -11,7 +14,7 @@ RewriteBase /
 </Files>
 
 # Protect application and system files from being viewed
-RewriteRule ^(?:classes|templates|tests)\b.* index.php/$0 [L]
+RewriteRule ^(?:classes|templates|tests|simpletest)\b.* index.php/$0 [L]
 
 # Allow any files or directories that exist to be displayed directly
 RewriteCond %{REQUEST_FILENAME} !-f

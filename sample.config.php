@@ -27,13 +27,13 @@ return array
 
 	'hash' => array
 	(
-		'salt'     => 'YOUR HASH OPTIONS HERE', // A random string at least 10 chars long
-		'function' => 'YOUR HASH OPTIONS HERE', // sha1, md5, etc.
+		'salt'     => 'Eu&4#Nss1{0m', // A random string at least 10 chars long
+		'function' => 'sha1', // sha1, md5, etc.
 	),
 
 	'admin' => array
 	(
-		'username' => 'admin',
-		'password' => 'test',
+		'username' => 'admin', // You can change this if you want
+		'password' => 'test', // You can change this if you want
 	),
 );
