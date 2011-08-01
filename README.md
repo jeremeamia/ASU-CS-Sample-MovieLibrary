@@ -16,7 +16,7 @@ Apache. PHP should have `short_tags` enabled for use in HTML templates. Also PHP
 needs to have the `php_mysqli` and `php_curl` extensions installed.
 
 This application also makes use of the Netflix API. You will need to sign up for
-a developer account as <http://developer.netflix.com> to axquire your API keys.
+a developer account as <http://developer.netflix.com> to acquire your API keys.
 
 ### Setup
 
