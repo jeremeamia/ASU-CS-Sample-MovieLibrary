@@ -35,8 +35,8 @@ class Database
 				try
 				{
 					$datetime = ($value instanceof DateTime) ? $value : new DateTime($value);
-					$value    = $datetime->format('Y-m-d H:i:s');
-					$success  = TRUE;
+					$value = $datetime->format('Y-m-d H:i:s');
+					$success = TRUE;
 				}
 				catch (Exception $exception)
 				{
