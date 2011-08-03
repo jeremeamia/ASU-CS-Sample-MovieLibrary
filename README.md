@@ -52,13 +52,18 @@ name in the `config.php` file.
 After the above are completed, you can run the `install.php` script which will
 confirm that your environment supports all of the application's requirements and
 also create an setup the database with the schema required for the application
-to run.
+to run. Once all items pass in the `install.php` script, you can delete it.
 
 #### Setup a User
 
-You will need to go to `/admin/createuser` in your application via the browser.
-Enter in the admin credentials defined in your `config.php` file. Then use the
-form to create a user account for the application.
+After the application is running, you will need to go to `/admin/createuser` in
+your application via the browser. Enter in the admin credentials defined in your
+`config.php` file. Then use the form to create a user account for the
+application.
+
+### Testing
+
+*Coming Soon*
 
 ## Development Todos
 
@@ -67,5 +72,5 @@ form to create a user account for the application.
     - Show how to mock the web service
 - Unit tests for other classes
 - Doc blocks on all classes
-- Improve web design
+- Improve web design (time permitting)
 - <s>Installation script</s>
