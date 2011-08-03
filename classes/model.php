@@ -1,5 +1,9 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
-
+/**
+ * The Model class ads ORM-type (Active Record) functionality to the App. It
+ * leverages the functions of the Database class, but provides even more
+ * abstraction. Models should all extend this class.
+ */
 abstract class Model
 {
 	protected $_database;
