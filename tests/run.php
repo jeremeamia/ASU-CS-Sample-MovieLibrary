@@ -3,7 +3,7 @@
 // Import the testing library
 require_once dirname(dirname(__FILE__)).'/simpletest/autorun.php';
 
-// Setup the test suite
+// Setup the test suite class
 class MovieLibraryTests extends TestSuite
 {
 	public function MovieLibraryTests()
@@ -11,16 +11,11 @@ class MovieLibraryTests extends TestSuite
 		// Create the test suite
 		$this->TestSuite('Movie Library Tests');
 
-		// Add the unit test classes
-		$this->loadTestFor('Helper_Collection');
-		$this->loadTestFor('Helper_HTML');
-		$this->loadTestFor('Config');
-	}
-
-	// Helper method that determines the test file for class and adds it
-	public function loadTestFor($class)
-	{
-		parent::addFile(dirname(__FILE__).'/test_'.strtolower($class).'.php');
+		// Add the unit test classes from the tests directory
+		foreach (glob(dirname(__FILE__).'/test_*.php') as $filename)
+		{
+			parent::addFile($filename);
+		}
 	}
 }
 
