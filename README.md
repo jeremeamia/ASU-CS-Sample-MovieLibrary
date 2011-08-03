@@ -61,7 +61,7 @@ your application via the browser. Enter in the admin credentials defined in your
 `config.php` file. Then use the form to create a user account for the
 application.
 
-### Testing
+## Testing
 
 *Coming Soon*
 
