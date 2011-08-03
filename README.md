@@ -13,7 +13,8 @@ practices.
 
 This application requires a standard LAMP stack with PHP 5.2+, MySQL, and
 Apache. PHP should have `short_tags` enabled for use in HTML templates. Also PHP
-needs to have the `php_mysqli` and `php_curl` extensions installed.
+needs to have the `php_mysqli` and `php_curl` extensions installed. These
+requirements are tested for in the `install.php` script.
 
 This application also makes use of the Netflix API. You will need to sign up for
 a developer account as <http://developer.netflix.com> to acquire your API keys.
@@ -23,29 +24,48 @@ a developer account as <http://developer.netflix.com> to acquire your API keys.
 Once the application is installed to a web server such that it is accessible by
 a web browser, there are just a few more things that need to be done.
 
+#### Configuration File
+
+The application comes with a `sample.config.php` file. You should rename this
+file to `config.php`, and edit this file to change all of the items in all-caps
+to be configured for your installation of the application. This includes your
+database credentials, and Netflix API keys.
+
+You will need to adjust line 7 of `config.php` to be the appropriate path to
+your application relative to your browser-accessible domain.
+
+#### Htaccess File
+
+You should rename the `sample.htaccess` file to `.htaccess`. You will need to
+adjust line 8 of `.htaccess` to be the appropriate path to your application
+relative to your browser-accessible domain.
+
 #### Database
 
-You should set up a mysql database for the application. The name is not
-important, but you will need to remember the name to put into the config file
-later. The `schema.sql` file contains the SQL code you need to run to setup the
-tables.
+You ned to setup MySQL for the application. You may create a database
+beforehand, or you may let the `install.php` script do it for you. Either way,
+you need to make sure you have entered the database credentials and database
+name in the `config.php` file.
 
-#### Sample Files
+#### Installation Script
 
-The application comes with 2 sample files:
+After the above are completed, you can run the `install.php` script which will
+confirm that your environment supports all of the application's requirements and
+also create an setup the database with the schema required for the application
+to run.
 
-- `sample.config.php` - You should rename this file to `config.php`. You should
-also edit this file change all of the items in all-caps to be configured for
-your installation of the application.
-- `sample.htaccess` - You should rename this file to `.htaccess`.
+#### Setup a User
 
-You will need to adjust line 8 of `.htaccess` and line 7 of `config.php` to be
-the appropriate path to your application relative to the domain name.
+You will need to go to `/admin/createuser` in your application via the browser.
+Enter in the admin credentials defined in your `config.php` file. Then use the
+form to create a user account for the application.
 
-## Todo
+## Development Todos
+
 - Model unit tests
     - Show how to mock the database
     - Show how to mock the web service
 - Unit tests for other classes
 - Doc blocks on all classes
-- Improve design
+- Improve web design
+- <s>Installation script</s>
