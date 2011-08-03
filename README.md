@@ -73,4 +73,3 @@ application.
 - Unit tests for other classes
 - Doc blocks on all classes
 - Improve web design (time permitting)
-- <s>Installation script</s>
