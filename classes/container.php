@@ -1,9 +1,22 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
-
+/**
+ * The Container class is a Dependency Injection Container and contains methods
+ * for creating the various objects required by the programs such that all of
+ * the required dependencies are injected automatically. It is an abstraction
+ * and organization of object instantiation.
+ */
 class Container
 {
+	/**
+	 * @var array Stores cached versions of items in the container
+	 */
 	protected $_cache = array();
 
+	/**
+	 * Returns an initialized Config object
+	 *
+	 * @return Config
+	 */
 	public function getConfig()
 	{
 		if ( ! isset($this->_cache['config']))
@@ -15,6 +28,11 @@ class Container
 		return $this->_cache['config'];
 	}
 
+	/**
+	 * Returns an initialized Session object
+	 *
+	 * @return Session
+	 */
 	public function getSession()
 	{
 		if ( ! isset($this->_cache['session']))
@@ -25,6 +43,11 @@ class Container
 		return $this->_cache['session'];
 	}
 
+	/**
+	 * Returns an initialized Request object
+	 *
+	 * @return Request
+	 */
 	public function getRequest()
 	{
 		if ( ! isset($this->_cache['request']))
@@ -35,6 +58,11 @@ class Container
 		return $this->_cache['request'];
 	}
 
+	/**
+	 * Returns an initialized database Cconnection
+	 *
+	 * @return MySQLi
+	 */
 	public function getDatabaseConnection()
 	{
 		if ( ! isset($this->_cache['database_connection']))
@@ -56,6 +84,11 @@ class Container
 		return $this->_cache['database_connection'];
 	}
 
+	/**
+	 * Returns an initialized Database object
+	 *
+	 * @return Database
+	 */
 	public function getDatabase()
 	{
 		if ( ! isset($this->_cache['database']))
@@ -67,6 +100,11 @@ class Container
 		return $this->_cache['database'];
 	}
 
+	/**
+	 * Returns an initialized Netflix object
+	 *
+	 * @return Service_Netflix_Library
+	 */
 	public function getNetflix()
 	{
 		if ( ! isset($this->_cache['netflix']))
@@ -78,6 +116,11 @@ class Container
 		return $this->_cache['netflix'];
 	}
 
+	/**
+	 * Returns an initialized Helper Collection object
+	 *
+	 * @return Helper_Collection
+	 */
 	public function getHelpers()
 	{
 		if ( ! isset($this->_cache['helpers']))
@@ -95,11 +138,21 @@ class Container
 		return $this->_cache['helpers'];
 	}
 
+	/**
+	 * Returns an initialized View object
+	 *
+	 * @return View
+	 */
 	public function getView($template)
 	{
 		return new View($template, $this->getHelpers(), $this->getConfig());
 	}
 
+	/**
+	 * Returns an initialized Model object
+	 *
+	 * @return Model
+	 */
 	public function getModel($name)
 	{
 		// Get the model class and make sure it exists

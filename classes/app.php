@@ -1,11 +1,24 @@
 <?php strpos($_SERVER['PHP_SELF'], 'index.php') OR die('You cannot execute this script.');
-
+/**
+ * The App class represents the Application itself and allows for its
+ * encapsulated execution.
+ */
 class App
 {
 	const NAME = 'MyMovieLibrary';
 
+	/**
+	 * @var string Contains the output of the application
+	 */
 	protected $_output = NULL;
 
+	/**
+	 * Executes the app by creating required objects and initiating the request
+	 *
+	 * @chainable
+	 * @throws RuntimeException
+	 * @return App
+	 */
 	public function execute()
 	{
 		// Register the auto-loader that will load the files we need for the classes we instantiate
@@ -22,11 +35,24 @@ class App
 		return $this;
 	}
 
+	/**
+	 * Returns the output of the application
+	 *
+	 * @return string
+	 */
 	public function renderOutput()
 	{
 		return (string) $this->_output;
 	}
 
+	/**
+	 * Loads a class by locating and importing its file. Can be used statically
+	 * or as an auto-loader.
+	 *
+	 * @static
+	 * @param string $class Name of the class to be loaded
+	 * @return bool
+	 */
 	public static function load($class)
 	{
 		// Determine the class's path

@@ -89,15 +89,19 @@ $database_name = isset($config['database']['name']) ? $config['database']['name'
 $success = FALSE;
 if ($database_name)
 {
+	// Create the database if it exists
 	$database_exists = $connection->select_db($database_name);
 	if ( ! $database_exists)
 	{
 		$sql = 'CREATE DATABASE IF NOT EXISTS '.$connection->real_escape_string($database_name);
 		$database_exists = $connection->query($sql);
+
+		// For some reason I must refresh the request in order for the schema queries to work
 		header('Location: '.$_SERVER['REQUEST_URI']);
 		exit;
 	}
 
+	// Execute the queries for building the schema
 	if ($database_exists)
 	{
 		$sql = file_get_contents('schema.sql');

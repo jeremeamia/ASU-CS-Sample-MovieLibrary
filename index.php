@@ -10,7 +10,13 @@
  * @author     Jeremy Lindblom
  * @copyright  Copyright (c) 2011 Jeremy Lindblom
  */
+
+// Turn on all errors for reporting
 error_reporting(-1);
+
+// Import the app class and create an instance
 require 'classes/app.php';
 $app = new App();
+
+// Execute the application and display the output
 echo $app->execute()->renderOutput();
