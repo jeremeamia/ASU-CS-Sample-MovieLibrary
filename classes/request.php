@@ -1,7 +1,14 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
-
+/**
+ * An Exception signifying a 404 error
+ */
 class RequestException404 extends Exception {}
 
+/**
+ * The request class is what processes the URL and determines which controller
+ * and action to execute. It also provides an interface to fetching user input
+ * (GET, POST, COOKIE), building URLs, and handling flash messages.
+ */
 class Request
 {
 	protected $_container;
