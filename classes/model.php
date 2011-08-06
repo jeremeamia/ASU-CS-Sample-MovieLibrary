@@ -6,15 +6,52 @@
  */
 abstract class Model
 {
+	/**
+	 * @var Database The database that model data is stored in
+	 */
 	protected $_database;
+
+	/**
+	 * @var Config The application's configuration
+	 */
 	protected $_config;
+
+	/**
+	 * @var array The properties of this model
+	 */
 	protected $_properties = array();
+
+	/**
+	 * @var array The properties that have been changed
+	 */
 	protected $_changed    = array();
+
+	/**
+	 * @var bool Whether or not the model has been loaded from the database
+	 */
 	protected $_loaded     = FALSE;
+
+	/**
+	 * @var string The name of the table of which this model represents
+	 */
 	protected $_table = NULL;
+
+	/**
+	 * @var array The fields or columns of the database table
+	 */
 	protected $_fields     = array();
+
+	/**
+	 * @var array The default ORDER BY information for SELECT queries
+	 */
 	protected $_order_by   = array();
 
+	/**
+	 * Constructs a Model object
+	 *
+	 * @param Database $database The database to work with
+	 * @param Config $config The configuration of the application
+	 */
 	public function __construct(Database $database, Config $config)
 	{
 		$this->_database = $database;
@@ -28,21 +65,52 @@ abstract class Model
 		}
 	}
 
+	/**
+	 * Returns whether or not the model has been loaded
+	 *
+	 * @return bool
+	 */
 	public function isLoaded()
 	{
 		return (bool) $this->_loaded;
 	}
 
+	/**
+	 * Returns whether or not the model is a new record (not yet inserted)
+	 *
+	 * @return bool
+	 */
 	public function isNew()
 	{
 		return (bool) $this->_properties['id'] == NULL;
 	}
 
+	/**
+	 * Returns whether or not the model is valid for saving
+	 *
+	 * @return bool
+	 */
 	public function isValid()
 	{
+		foreach ($this->_validationRules() as $field => $rules)
+		{
+			foreach ($rules as $function => $args)
+			{
+				array_unshift($args, $this->{$field});
+				if ( ! call_user_func_array($function, $args))
+					return FALSE;
+			}
+		}
+
 		return TRUE;
 	}
 
+	/**
+	 * Saves (INSERTS or UPDATES) the model to the database
+	 *
+	 * @chainable
+	 * @return Model
+	 */
 	public function save()
 	{
 		if ($this->isNew())
@@ -51,6 +119,14 @@ abstract class Model
 			return $this->update();
 	}
 
+	/**
+	 * Inserts the model into the database. The INSERT query is built from
+	 * properties array.
+	 *
+	 * @chainable
+	 * @throws RuntimeException
+	 * @return Model
+	 */
 	public function create()
 	{
 		$values = array();
@@ -77,6 +153,12 @@ abstract class Model
 		return $this;
 	}
 
+	/**
+	 * Reads a record from the database into a model
+	 *
+	 * @param int $id The ID of the record to be read
+	 * @return Model
+	 */
 	public function read($id)
 	{
 		$results = $this->_database->select($this->_table, $id);
@@ -87,6 +169,15 @@ abstract class Model
 		return $this->populate($row);
 	}
 
+	/**
+	 * Reads records from the database based on the provided criteria
+	 *
+	 * @param string $where A string representing a SQL WHERE clause
+	 * @param array $order_by An array of ORDER BY parameters
+	 * @param int $limit An integer indicating the number of records to get
+	 * @param int $offset And integer marking the offset of the records
+	 * @return array
+	 */
 	public function readAll($where = NULL, array $order_by = NULL, $limit = NULL, $offset = NULL)
 	{
 		if (empty($order_by) AND ! empty($this->_order_by))
@@ -99,20 +190,41 @@ abstract class Model
 		return $this->_createModelsFromResults($results);
 	}
 
-	public function readFirst($where = NULL, array $order_by = NULL, $limit = 1)
+	/**
+	 * Reads the first record from the database based on the provided criteria
+	 *
+	 * @param string $where A string representing a SQL WHERE clause
+	 * @param array $order_by An array of ORDER BY parameters
+	 * @return mixed
+	 */
+	public function readFirst($where = NULL, array $order_by = NULL)
 	{
-		$results = $this->readAll($where, $order_by, $limit);
+		$results = $this->readAll($where, $order_by, 1);
 		if (isset($results[0]))
 			return $results[0];
 		else
 			return NULL;
 	}
 
+	/**
+	 * Counts records from the database based on the provided criteria
+	 *
+	 * @param string $where A string representing a SQL WHERE clause
+	 * @return
+	 */
 	public function countAll($where = NULL)
 	{
 		return $this->_database->countAll($this->_table, $where);
 	}
 
+	/**
+	 * Updates the model data into the database. The INSERT query is built from
+	 * the properties array.
+	 *
+	 * @chainable
+	 * @throws RuntimeException
+	 * @return Model
+	 */
 	public function update()
 	{
 		// Make sure items in changes array are unique
@@ -130,6 +242,12 @@ abstract class Model
 		return $this;
 	}
 
+	/**
+	 * Deletes the database record represented by this model
+	 *
+	 * @throws RuntimeException
+	 * @return bool
+	 */
 	public function delete()
 	{
 		$result = $this->_database->delete($this->_table, $this->get('id'));
@@ -139,6 +257,13 @@ abstract class Model
 		return $result;
 	}
 
+	/**
+	 * Retrieves the value of a property in the database
+	 *
+	 * @throws OutOfBoundsException
+	 * @param string $key The name of the property
+	 * @return array|null|string
+	 */
 	public function get($key)
 	{
 		if (array_key_exists($key, $this->_properties))
@@ -152,6 +277,14 @@ abstract class Model
 			throw new OutOfBoundsException('The property "'.$key.'" does not exist in table "'.$this->_table.'".');
 	}
 
+	/**
+	 * Sets the value of a property in the database
+	 *
+	 * @throws OutOfBoundsException
+	 * @param string $key The name of the property
+	 * @param mixed $value The value of the property
+	 * @return Model
+	 */
 	public function set($key, $value = NULL)
 	{
 		if (is_array($key))
@@ -174,16 +307,33 @@ abstract class Model
 		return $this;
 	}
 
+	/**
+	 * Returns the properties of the model as an array
+	 *
+	 * @return array
+	 */
 	public function asArray()
 	{
 		return $this->_properties;
 	}
 
+	/**
+	 * Returns the properties of the model that have changed
+	 *
+	 * @return array
+	 */
 	public function changedProperties()
 	{
 		return $this->_changed;
 	}
 
+	/**
+	 * Resets and clears out the model such that it will behave like a new
+	 * instance
+	 *
+	 * @chainable
+	 * @return Model
+	 */
 	public function clear()
 	{
 		foreach ($this->_fields as $field => $type)
@@ -197,6 +347,12 @@ abstract class Model
 		return $this;
 	}
 
+	/**
+	 * Populates data into the model
+	 *
+	 * @param array $values The values to assign to the properties
+	 * @return Model
+	 */
 	protected function populate(array $values)
 	{
 		foreach ($values as $key => $value)
@@ -213,6 +369,12 @@ abstract class Model
 		return $this;
 	}
 
+	/**
+	 * Helps turn database results into instances of the model
+	 *
+	 * @param MySQLi_Result $results The database result set
+	 * @return array
+	 */
 	protected function _createModelsFromResults(MySQLi_Result $results)
 	{
 		$models = array();
@@ -224,5 +386,30 @@ abstract class Model
 		$results->free();
 
 		return $models;
+	}
+
+	/**
+	 * Returns the validation rules for each field in the model
+	 * 
+	 * @return array
+	 */
+	protected function _validationRules()
+	{
+		return array();
+	}
+
+	public function notEmpty($value)
+	{
+		return (bool) ( ! empty($value));
+	}
+
+	public function maxLength($value, $max_length)
+	{
+		return (bool) (strlen($value) <= $max_length);
+	}
+
+	public function exactLength($value, $length)
+	{
+		return (bool) (strlen($value) == $length);
 	}
 }
