@@ -5,6 +5,9 @@
  */
 class App
 {
+	/**
+	 * @constant string The name of the application
+	 */
 	const NAME = 'MyMovieLibrary';
 
 	/**
