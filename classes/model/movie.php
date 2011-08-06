@@ -79,4 +79,44 @@ class Model_Movie extends Model
 
 		return $movie;
 	}
+
+	protected function _validationRules()
+	{
+		return array(
+			'netflix_id' => array(
+				'Model::notEmpty' => array(),
+				'is_string' => array(),
+				'Model::maxLength' => array(100),
+			),
+			'title' => array(
+				'Model::notEmpty' => array(),
+				'is_string' => array(),
+				'Model::maxLength' => array(50),
+			),
+			'year' => array(
+				'Model::notEmpty' => array(),
+				'ctype_digit' => array(),
+				'Model::exactLength' => array(4),
+			),
+			'mpaa_rating' => array(
+				'Model::notEmpty' => array(),
+				'is_string' => array(),
+				'Model::maxLength' => array(10),
+			),
+			'categories' => array(
+				'Model::notEmpty' => array(),
+				'is_string' => array(),
+				'Model::maxLength' => array(200),
+			),
+			'user_rating' => array(
+				'Model::notEmpty' => array(),
+				'is_float' => array(),
+			),
+			'box_art' => array(
+				'Model::notEmpty' => array(),
+				'is_string' => array(),
+				'Model::maxLength' => array(100),
+			),
+		);
+	}
 }
