@@ -63,7 +63,14 @@ application.
 
 ## Testing
 
-*Coming Soon*
+### Running Tests
+
+To run the unit tests and see the results, you will need to go to
+`/admin/rununittests` in your application via the browser. Enter in the admin
+credentials defined in your `config.php` file, if prompted to do so. The unit
+tests results page will now be displayed.
+
+You may want to alter existing tests or add new ones to experiment further.
 
 ## Development Todos
 
