@@ -84,4 +84,31 @@ class Model_User extends Model
 		// Hash the encoded, salted password and return the result.
 		return call_user_func($hash, $encoded);
 	}
+
+	protected function _validationRules()
+	{
+		return array(
+			'first_name' => array(
+				'notEmpty' => array(),
+				'is_string' => array(),
+				'maxLength' => array(50),
+			),
+			'last_name' => array(
+				'notEmpty' => array(),
+				'is_string' => array(),
+				'maxLength' => array(50),
+			),
+			'email' => array(
+				'notEmpty' => array(),
+				'is_string' => array(),
+				'matchRegex' => array('/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/iD'),
+				'maxLength' => array(100),
+			),
+			'password' => array(
+				'notEmpty' => array(),
+				'is_string' => array(),
+				'maxLength' => array(50),
+			),
+		);
+	}
 }

@@ -40,4 +40,21 @@ class Model_Ownership extends Model
 
 		return $ownership->delete();
 	}
+
+	protected function _validationRules()
+	{
+		return array(
+			'user_id' => array(
+				'notEmpty' => array(),
+				'ctype_digit' => array(),
+			),
+			'movie_id' => array(
+				'notEmpty' => array(),
+				'ctype_digit' => array(),
+			),
+			'date_added' => array(
+				'notEmpty' => array(),
+			),
+		);
+	}
 }

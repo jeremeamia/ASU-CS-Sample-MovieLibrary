@@ -22,6 +22,11 @@ class Model_Movie extends Model
 			$value = implode(', ', $value);
 		}
 
+		if ($key == 'user_rating')
+		{
+			$value = (float) $value;
+		}
+
 		return parent::set($key, $value);
 	}
 
@@ -84,38 +89,38 @@ class Model_Movie extends Model
 	{
 		return array(
 			'netflix_id' => array(
-				'Model::notEmpty' => array(),
+				'notEmpty' => array(),
 				'is_string' => array(),
-				'Model::maxLength' => array(100),
+				'maxLength' => array(100),
 			),
 			'title' => array(
-				'Model::notEmpty' => array(),
+				'notEmpty' => array(),
 				'is_string' => array(),
-				'Model::maxLength' => array(50),
+				'maxLength' => array(75),
 			),
 			'year' => array(
-				'Model::notEmpty' => array(),
+				'notEmpty' => array(),
 				'ctype_digit' => array(),
-				'Model::exactLength' => array(4),
+				'exactLength' => array(4),
 			),
 			'mpaa_rating' => array(
-				'Model::notEmpty' => array(),
+				'notEmpty' => array(),
 				'is_string' => array(),
-				'Model::maxLength' => array(10),
+				'maxLength' => array(10),
 			),
 			'categories' => array(
-				'Model::notEmpty' => array(),
+				'notEmpty' => array(),
 				'is_string' => array(),
-				'Model::maxLength' => array(200),
+				'maxLength' => array(200),
 			),
 			'user_rating' => array(
-				'Model::notEmpty' => array(),
-				'is_float' => array(),
+				'notEmpty' => array(),
+				'is_numeric' => array(),
 			),
 			'box_art' => array(
-				'Model::notEmpty' => array(),
+				'notEmpty' => array(),
 				'is_string' => array(),
-				'Model::maxLength' => array(100),
+				'maxLength' => array(100),
 			),
 		);
 	}

@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `movies` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `netflix_id` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(75) COLLATE utf8_unicode_ci NOT NULL,
   `year` char(4) COLLATE utf8_unicode_ci NOT NULL,
   `mpaa_rating` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `categories` varchar(200) COLLATE utf8_unicode_ci NOT NULL,

@@ -24,12 +24,12 @@ abstract class Model
 	/**
 	 * @var array The properties that have been changed
 	 */
-	protected $_changed    = array();
+	protected $_changed = array();
 
 	/**
 	 * @var bool Whether or not the model has been loaded from the database
 	 */
-	protected $_loaded     = FALSE;
+	protected $_loaded = FALSE;
 
 	/**
 	 * @var string The name of the table of which this model represents
@@ -39,12 +39,12 @@ abstract class Model
 	/**
 	 * @var array The fields or columns of the database table
 	 */
-	protected $_fields     = array();
+	protected $_fields = array();
 
 	/**
 	 * @var array The default ORDER BY information for SELECT queries
 	 */
-	protected $_order_by   = array();
+	protected $_order_by = array();
 
 	/**
 	 * Constructs a Model object
@@ -92,17 +92,10 @@ abstract class Model
 	 */
 	public function isValid()
 	{
-		foreach ($this->_validationRules() as $field => $rules)
-		{
-			foreach ($rules as $function => $args)
-			{
-				array_unshift($args, $this->{$field});
-				if ( ! call_user_func_array($function, $args))
-					return FALSE;
-			}
-		}
-
-		return TRUE;
+		$validation = new Validation($this->_properties);
+		$validation->addRules($this->_validationRules());
+		
+		return $validation->validate();
 	}
 
 	/**
@@ -390,26 +383,11 @@ abstract class Model
 
 	/**
 	 * Returns the validation rules for each field in the model
-	 * 
+	 *
 	 * @return array
 	 */
 	protected function _validationRules()
 	{
 		return array();
-	}
-
-	public function notEmpty($value)
-	{
-		return (bool) ( ! empty($value));
-	}
-
-	public function maxLength($value, $max_length)
-	{
-		return (bool) (strlen($value) <= $max_length);
-	}
-
-	public function exactLength($value, $length)
-	{
-		return (bool) (strlen($value) == $length);
 	}
 }
