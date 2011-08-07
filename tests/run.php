@@ -18,6 +18,3 @@ class MovieLibraryTests extends TestSuite
 		}
 	}
 }
-
-// Style the testing output to be sans-serif for easier reading
-echo '<style>body {font-family: sans-serif;}</style>';

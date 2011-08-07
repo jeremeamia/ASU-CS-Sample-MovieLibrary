@@ -62,7 +62,7 @@ class App
 		$file = dirname(__FILE__).'/'.str_replace('_', '/', strtolower($class)).'.php';
 
 		// Load the file
-		if (file_exists($file))
+		if (file_exists($file) AND ! class_exists($class, FALSE))
 		{
 			require $file;
 			return TRUE;

@@ -48,4 +48,16 @@ class Controller_Admin extends Controller_Page
 			}
 		}
 	}
+
+	public function actionRununittests()
+	{
+		// Require the test suite for running the tests
+		require 'tests/run.php';
+
+		// Style the testing output to be sans-serif for easier reading
+		echo '<style>body {font-family: sans-serif;}</style>';
+
+		// Terminate the application and trigger the tests to run
+		exit;
+	}
 }
