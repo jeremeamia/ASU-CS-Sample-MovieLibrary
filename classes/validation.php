@@ -28,6 +28,7 @@ class Validation
 	/**
 	 * Add a rule to validate with
 	 *
+	 * @chainable
 	 * @param string $key The key to which the rule applies
 	 * @param string $rule The rule function (either in this class or PHP)
 	 * @param array $args An array of arguments
@@ -63,6 +64,7 @@ class Validation
 	/**
 	 * Add a bunch of rules at a time
 	 *
+	 * @chainable
 	 * @param array $rule_list The list of rules to add
 	 * @return Validation
 	 */

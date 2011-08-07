@@ -11,14 +11,46 @@ class RequestException404 extends Exception {}
  */
 class Request
 {
+	/**
+	 * @var Container The dependency injection container
+	 */
 	protected $_container;
+
+	/**
+	 * @var array The sanitized POST input
+	 */
 	protected $_post;
+
+	/**
+	 * @var array The sanitized GET input
+	 */
 	protected $_get;
+
+	/**
+	 * @var array The sanitized COOKIE input
+	 */
 	protected $_cookie;
+
+	/**
+	 * @var string The name of the controller that will be executed
+	 */
 	protected $_controller;
+
+	/**
+	 * @var string The name of the action that will be executed
+	 */
 	protected $_action;
+
+	/**
+	 * @var string The name of the resource associated with the request
+	 */
 	protected $_resource_id;
 
+	/**
+	 * Constructs a Request object
+	 *
+	 * @param Container $container
+	 */
 	public function __construct(Container $container)
 	{
 		$this->_container = $container;
@@ -30,6 +62,12 @@ class Request
 		$this->_processUrl();
 	}
 
+	/**
+	 * Executes the request by calling the action on the controller. Returns
+	 * the result.
+	 *
+	 * @return string
+	 */
 	public function execute()
 	{
 		try
@@ -71,50 +109,103 @@ class Request
 		return $controller->getResponse()->render();
 	}
 
+	/**
+	 * Fetches data from POST
+	 *
+	 * @param string $key The key of the item in the POST array
+	 * @param mixed $default A fallback value if the key doesn't exist
+	 * @return mixed
+	 */
 	public function post($key = NULL, $default = NULL)
 	{
 		if ($key === NULL) return $this->_post;
 		return array_key_exists($key, $this->_post) ? $this->_post[$key] : $default;
 	}
 
+	/**
+	 * Fetches data from GET
+	 *
+	 * @param string $key The key of the item in the GET array
+	 * @param mixed $default A fallback value if the key doesn't exist
+	 * @return mixed
+	 */
 	public function get($key, $default = NULL)
 	{
 		if ($key === NULL) return $this->_get;
 		return array_key_exists($key, $this->_get) ? $this->_get[$key] : $default;
 	}
 
+	/**
+	 * Fetches data from COOKIE
+	 *
+	 * @param string $key The key of the item in the COOKIE array
+	 * @param mixed $default A fallback value if the key doesn't exist
+	 * @return mixed
+	 */
 	public function cookie($key, $default = NULL)
 	{
 		if ($key === NULL) return $this->_cookie;
 		return array_key_exists($key, $this->_cookie) ? $this->_cookie[$key] : $default;
 	}
 
+	/**
+	 * Return the name of the controller
+	 *
+	 * @return string
+	 */
 	public function getController()
 	{
 		return $this->_controller;
 	}
 
+	/**
+	 * Returns the name of the action
+	 *
+	 * @return string
+	 */
 	public function getAction()
 	{
 		return $this->_action;
 	}
 
+	/**
+	 * Returns the ID of the resource to which the request refers
+	 *
+	 * @return int
+	 */
 	public function getResourceId()
 	{
-		return $this->_resource_id;
+		return (int) $this->_resource_id;
 	}
 
+	/**
+	 * Returns the container
+	 *
+	 * @return Container
+	 */
 	public function getContainer()
 	{
 		return $this->_container;
 	}
 
+	/**
+	 * Sets a flash message in the SESSION
+	 *
+	 * @param string $type The type of message (e.g. error, success, info)
+	 * @param string $message The message content
+	 * @return void
+	 */
 	public function setUserMessage($type, $message)
 	{
 		$details = array('type' => $type, 'message' => $message);
 		$this->_container->getSession()->set('user.message', $details);
 	}
 
+	/**
+	 * Retrieves a flash message from the SESSION
+	 *
+	 * @return mixed
+	 */
 	public function getUserMessage()
 	{
 		$message = $this->_container->getSession()->get('user.message');
@@ -125,8 +216,9 @@ class Request
 	/**
 	 * Construct an absolute url pointing to an internal or external resource
 	 *
-	 * @param	mixed	$uri
-	 * @return	string
+	 * @param mixed $uri relative or absolute URI or URL
+	 * @param array $args Query arguments
+	 * @return string
 	 */
 	public function buildUrl($uri = NULL, array $args = array())
 	{
@@ -146,11 +238,21 @@ class Request
 		return $uri;
 	}
 
+	/**
+	 * Returns the current URL
+	 *
+	 * @return string
+	 */
 	public function currentUrl()
 	{
 		return $this->buildUrl(array($this->_controller, $this->_action, $this->_resource_id), $this->_get);
 	}
 
+	/**
+	 * Returns the base URL of the application
+	 *
+	 * @return mixed
+	 */
 	public function baseUrl()
 	{
 		return $this->_container->getConfig()->get('site', 'base_uri');
@@ -159,8 +261,8 @@ class Request
 	/**
 	 * Redirect the request to a different URL
 	 *
-	 * @param	mixed	$uri
-	 * @param	string	$id
+	 * @param mixed $uri A URI or URL
+	 * @return void
 	 */
 	public function redirect($uri)
 	{
@@ -169,6 +271,12 @@ class Request
 		exit;
 	}
 
+	/**
+	 * Sanitizes and normalizes values
+	 *
+	 * @param mixed $value Whatever value you want to pass in
+	 * @return mixed
+	 */
 	protected function _sanitize($value)
 	{
 		if (is_array($value))
@@ -197,6 +305,12 @@ class Request
 		return $value;
 	}
 
+	/**
+	 * Parses the URL to get the controller, action, and resource this request
+	 * is supposed to execute
+	 *
+	 * @return void
+	 */
 	protected function _processUrl()
 	{
 		// Get the URI
