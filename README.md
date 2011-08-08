@@ -77,6 +77,6 @@ You may want to alter existing tests or add new ones to experiment further.
 - Model unit tests
     - Show how to mock the database
     - Show how to mock the web service
-- Unit tests for other classes
-- Doc blocks on all classes
+- Doc blocks for helpers and models (time permitting)
+- Unit tests for other classes (time permitting)
 - Improve web design (time permitting)
