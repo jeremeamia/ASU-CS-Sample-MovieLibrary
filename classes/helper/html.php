@@ -1,5 +1,7 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
-
+/**
+ * A simple class for generating HTML elements
+ */
 class Helper_HTML extends Helper
 {
 	protected $_request = NULL;

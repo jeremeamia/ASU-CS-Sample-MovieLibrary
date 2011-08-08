@@ -1,5 +1,8 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
-
+/**
+ * A simple collection class for storing and retrieving helper objects. This
+ * class is mainly used to aid with type hinting in the View class
+ */
 class Helper_Collection
 {
 	protected $_helpers;

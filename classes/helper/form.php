@@ -1,5 +1,7 @@
 <?php defined('App::NAME') OR die('You cannot execute this script.');
-
+/**
+ * A simple class for building HTML for forms
+ */
 class Helper_Form extends Helper
 {
 	protected $_request = NULL;
