@@ -2,7 +2,7 @@
 
 class Model_Movie extends Model
 {
-	protected $_table = 'movies';
+	protected $_table = 'movielibrary_movies';
 	protected $_order_by = array('year' => 'DESC', 'title' => 'ASC');
 	protected $_fields = array
 	(
@@ -33,9 +33,9 @@ class Model_Movie extends Model
 	public function getMoviesOwnedByUser(Model_User $user)
 	{
 		// Form a custom SQL query for the many-to-many relationship
-		$sql = 'SELECT `movies`.* FROM `movies` ';
-		$sql .= 'INNER JOIN `ownerships` ON `ownerships`.movie_id = `movies`.id ';
-		$sql .= 'WHERE `ownerships`.user_id = '.$user->get('id').' ';
+		$sql = 'SELECT `movielibrary_movies`.* FROM `movielibrary_movies` ';
+		$sql .= 'INNER JOIN `movielibrary_ownerships` ON `movielibrary_ownerships`.movie_id = `movielibrary_movies`.id ';
+		$sql .= 'WHERE `movielibrary_ownerships`.user_id = '.$user->get('id').' ';
 		$sql .= 'ORDER BY';
 		foreach ($this->_order_by as $field => $direction)
 		{

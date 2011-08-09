@@ -2,7 +2,7 @@
 
 class Model_Ownership extends Model
 {
-	protected $_table = 'ownerships';
+	protected $_table = 'movielibrary_ownerships';
 	protected $_order_by = array('date_added' => 'DESC');
 	protected $_fields = array
 	(

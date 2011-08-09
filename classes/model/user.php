@@ -3,7 +3,7 @@
 class Model_User extends Model
 {
 	protected $_session;
-	protected $_table = 'users';
+	protected $_table = 'movielibrary_users';
 	protected $_order_by = array('last_name' => 'ASC', 'first_name' => 'ASC');
 	protected $_fields = array
 	(

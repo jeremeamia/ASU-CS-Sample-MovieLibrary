@@ -25,6 +25,7 @@
 			<h1>Install Application</h1>
 <?php
 
+error_reporting(0);
 echo '<h2>Sanity Checks:</h2>';
 
 $check = (file_exists('config.php') AND file_exists('schema.sql') AND file_exists('classes')) ? 'yes' : 'no';
@@ -63,21 +64,39 @@ class App {const NAME = TRUE;} // Declares a constant needed by config file
 $config = include 'config.php';
 
 // Database connection
-$connection = new MySQLi(
+$connection = @new MySQLi(
 	isset($config['database']['host']) ? $config['database']['host'] : NULL,
 	isset($config['database']['username']) ? $config['database']['username'] : NULL,
-	isset($config['database']['password']) ? $config['database']['password'] : NULL
+	isset($config['database']['password']) ? $config['database']['password'] : NULL,
+	isset($config['database']['name']) ? $config['database']['name'] : NULL
 );
 $check = ( ! $connection->connect_error) ? 'yes' : 'no';
-echo '<p class="check '.$check.'">Application requires valid database connection details.</p>';
+$extra_note = ($check == 'yes') ? '' : '<br />&ensp;&rArr;&ensp;<small>Please '
+	. 'verify that your database connection credentials are correct in the '
+	. '<kbd>config.php</kbd> file and the database name you specified actually '
+	. 'exists (You will have to create it manually if it doesn\'t).</small>';
+echo '<p class="check '.$check.'">Application requires valid database connection details.'.$extra_note.'</p>';
 
 // Test Netflix API key
 $consumer_key = isset($config['netflix']['api_key']) ? $config['netflix']['api_key'] : NULL;
-if ($consumer_key)
+$shared_secret = isset($config['netflix']['secret_key']) ? $config['netflix']['secret_key'] : NULL;
+if ($consumer_key && $shared_secret)
 {
-	$url = 'http://api.netflix.com/catalog/titles/autocomplete?oauth_consumer_key='.$consumer_key.'&term=The%20Net';
-	$api_call = simplexml_load_string(file_get_contents($url));
-	$check = ($api_call !== NULL) ? 'yes' : 'no';
+	include dirname(__FILE__).'/classes/service/netflix/oauth.php';
+	$oauth = new Service_Netflix_OAuth();
+	$signed = $oauth->sign(array(
+		'path' => 'http://api.netflix.com/catalog/titles',
+		'parameters' => 'term='.urlencode('The Net'),
+		'signatures' => array(
+			'api_key' => $consumer_key,
+			'shared_secret' => $shared_secret,
+		),
+	));
+	if ($api_call = @file_get_contents($signed['signed_url']))
+	{
+		$api_call = simplexml_load_string($api_call);
+	}
+	$check = $api_call ? 'yes' : 'no';
 }
 else
 {
@@ -90,24 +109,22 @@ echo '<p class="check '.$check.'">Application requires valid api key for Netflix
 echo '<h2>Setup Database:</h2>';
 
 // Setup Database
-$database_name = isset($config['database']['name']) ? $config['database']['name'] : NULL;
-$success = FALSE;
-if ($database_name)
+if ($success = ( ! $connection->connect_error))
 {
-	// Create the database if it exists
-	$database_exists = $connection->select_db($database_name);
-	if ( ! $database_exists)
+	// Check if tables exist
+	$missing_tables = array('movielibrary_movies', 'movielibrary_ownerships', 'movielibrary_users');
+	$tables = $connection->query('SHOW TABLES');
+	while ($table = $tables->fetch_row())
 	{
-		$sql = 'CREATE DATABASE IF NOT EXISTS '.$connection->real_escape_string($database_name);
-		$database_exists = $connection->query($sql);
-
-		// For some reason I must refresh the request in order for the schema queries to work
-		header('Location: '.$_SERVER['REQUEST_URI']);
-		exit;
+		$index = array_search($table[0], $missing_tables);
+		if ($index !== FALSE)
+		{
+			unset($missing_tables[$index]);
+		}
 	}
-
+	
 	// Execute the queries for building the schema
-	if ($database_exists)
+	if ( ! empty($missing_tables))
 	{
 		$sql = file_get_contents('schema.sql');
 		$previous_query_successful = TRUE;
@@ -116,14 +133,18 @@ if ($database_name)
 			$query = trim($query);
 			if ($previous_query_successful AND $query)
 			{
-				$previous_query_successful = $connection->query($query);
+				$previous_query_successful = @$connection->query($query);
 			}
 		}
 		$success = $previous_query_successful;
 	}
 }
 $check = $success ? 'yes' : 'no';
-echo '<p class="check '.$check.'">Application requires database with correct schema in place.</p>';
+$extra_note = $success ? '' : '<br />&ensp;&rArr;&ensp;<small>Either your database '
+	. 'connection cannot be established or your database user does not have sufficient '
+	. 'permissions to create tables. You may need to run the <kbd>schema.sql</kbd> '
+	. 'manually from your database administration tool.</small>';
+echo '<p class="check '.$check.'">Application requires database with correct schema.'.$extra_note.'</p>';
 
 ?>
 		<hr>

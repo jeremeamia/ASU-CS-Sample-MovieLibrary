@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `movies` (
+CREATE TABLE IF NOT EXISTS `movielibrary_movies` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `netflix_id` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(75) COLLATE utf8_unicode_ci NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `movies` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `ownerships` (
+CREATE TABLE IF NOT EXISTS `movielibrary_ownerships` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `movie_id` int(11) unsigned NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `ownerships` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `movielibrary_users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `first_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `last_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
