@@ -39,6 +39,10 @@ $version = explode('.', PHP_VERSION);
 $check = ($version[0] >= 5 OR $version[1] >= 2) ? 'yes' : 'no';
 echo '<p class="check '.$check.'">Application requires PHP version 5.2 or higher.</p>';
 
+// SimpleXML Available
+$check = function_exists('simplexml_load_string') ? 'yes' : 'no';
+echo '<p class="check '.$check.'">Application requires the SimpleXML extension.</p>';
+
 // Check short tags
 $check = ini_get('short_open_tag') ? 'yes' : 'no';
 echo '<p class="check '.$check.'">Application requires PHP short tags to be enabled.</p>';
@@ -55,6 +59,7 @@ echo '<p class="check '.$check.'">Application requires the MySQLi PHP extension.
 
 echo '<h2>Configuration:</h2>';
 
+class App {const NAME = TRUE;} // Declares a constant needed by config file
 $config = include 'config.php';
 
 // Database connection
@@ -70,8 +75,8 @@ echo '<p class="check '.$check.'">Application requires valid database connection
 $consumer_key = isset($config['netflix']['api_key']) ? $config['netflix']['api_key'] : NULL;
 if ($consumer_key)
 {
-	$url = 'http://api.netflix.com/catalog/titles/autocomplete?oauth_consumer_key='.$consumer_key.'&term=The%20Net&output=json';
-	$api_call = @json_decode(file_get_contents($url));
+	$url = 'http://api.netflix.com/catalog/titles/autocomplete?oauth_consumer_key='.$consumer_key.'&term=The%20Net';
+	$api_call = simplexml_load_string(file_get_contents($url));
 	$check = ($api_call !== NULL) ? 'yes' : 'no';
 }
 else
@@ -80,7 +85,7 @@ else
 }
 echo '<p class="check '.$check.'">Application requires valid api key for Netflix Develop API.</p>';
 
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 echo '<h2>Setup Database:</h2>';
 

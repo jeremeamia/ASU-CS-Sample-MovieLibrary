@@ -94,8 +94,9 @@ abstract class Model
 	{
 		$validation = new Validation($this->_properties);
 		$validation->addRules($this->_validationRules());
-		
-		return $validation->validate();
+		$valid = $validation->validate();
+
+		return $valid;
 	}
 
 	/**

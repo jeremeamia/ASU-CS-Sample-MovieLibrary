@@ -95,7 +95,6 @@ class Validation
 				array_unshift($args, $this->_data[$key]);
 				if ( ! call_user_func_array($function, $args))
 				{
-					var_dump($key, $this->_data[$key], $function);echo'<br>';
 					return FALSE;
 				}
 			}
