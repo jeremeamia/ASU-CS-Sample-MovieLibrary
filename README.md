@@ -34,12 +34,6 @@ database credentials, and Netflix API keys.
 You will need to adjust line 7 of `config.php` to be the appropriate path to
 your application relative to your web-accessible domain name.
 
-#### Htaccess File
-
-You should rename the `sample.htaccess` file to `.htaccess`. You will need to
-adjust line 8 of `.htaccess` to be the appropriate path to your application
-relative to your browser-accessible domain.
-
 #### Database
 
 You ned to setup MySQL for the application. You may create a database
@@ -61,19 +55,19 @@ to run. Once all items pass in the `install.php` script, you can delete it.
 
 #### Setup a User
 
-After the application is running, you will need to go to `/admin/createuser` in
-your application via the browser. Enter in the admin credentials defined in your
-`config.php` file. Then use the form to create a user account for the
-application.
+After the application is running, you will need to go to
+`index.php/admin/createuser` in your application via the browser. Enter in the
+admin credentials defined in your `config.php` file. Then use the form to create
+a user account for the application.
 
 ## Testing
 
 ### Running Tests
 
 To run the unit tests and see the results, you will need to go to
-`/admin/rununittests` in your application via the browser. Enter in the admin
-credentials defined in your `config.php` file, if prompted to do so. The unit
-tests results page will now be displayed.
+`index.php/admin/rununittests` in your application via the browser. Enter in the
+admin credentials defined in your `config.php` file, if prompted to do so. The
+unit tests results page will now be displayed.
 
 You may want to try altering existing tests or adding new ones to experiment.
 

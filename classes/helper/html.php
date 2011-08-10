@@ -31,7 +31,7 @@ class Helper_HTML extends Helper
 
 	public function image($src, $alt, array $attributes = array())
 	{
-		$attributes['src'] = (strpos($src, 'http') === 0) ? $src : $this->_request->baseUrl().$src;
+		$attributes['src'] = (strpos($src, 'http') === 0) ? $src : $this->_request->baseUrl(TRUE).$src;
 		$attributes['alt'] = $alt;
 		return '<img'.$this->attributes($attributes).'>';
 	}
@@ -39,7 +39,7 @@ class Helper_HTML extends Helper
 	public function stylesheet($href)
 	{
 		$attributes['rel'] = 'stylesheet';
-		$attributes['href'] = (strpos($href, 'http') === 0) ? $href : $this->_request->baseUrl().$href;
+		$attributes['href'] = (strpos($href, 'http') === 0) ? $href : $this->_request->baseUrl(TRUE).$href;
 		return '<link'.$this->attributes($attributes).'>';
 	}
 }

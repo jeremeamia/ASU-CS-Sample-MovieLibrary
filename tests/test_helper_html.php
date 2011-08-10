@@ -11,7 +11,7 @@ class Test_Helper_HTML extends UnitTestCase
 	public function setUp()
 	{
 		$request = new MockRequest();
-		$request->returns('buildUrl', 'http://example.com/controller/action/id', array(array('controller', 'action', 'id')));
+		$request->returns('buildUrl', 'http://example.com/index.php/controller/action/id', array(array('controller', 'action', 'id')));
 		$request->returns('buildUrl', 'http://example.com/');
 		$request->returns('baseUrl', 'http://example.com/');
 
@@ -41,10 +41,10 @@ class Test_Helper_HTML extends UnitTestCase
 		$this->assertEqual($result, '<a href="http://example.com/">http://example.com</a>');
 
 		$result = $this->html_helper->link('Example', array('controller', 'action', 'id'));
-		$this->assertEqual($result, '<a href="http://example.com/controller/action/id">Example</a>');
+		$this->assertEqual($result, '<a href="http://example.com/index.php/controller/action/id">Example</a>');
 
 		$result = $this->html_helper->link('Example', array('controller', 'action', 'id'), array('class' => 'example'));
-		$this->assertEqual($result, '<a class="example" href="http://example.com/controller/action/id">Example</a>');
+		$this->assertEqual($result, '<a class="example" href="http://example.com/index.php/controller/action/id">Example</a>');
 	}
 
 	public function testGeneratingHtmlForImages()
