@@ -18,6 +18,7 @@
 			p.no {background-color: #fcc; color: #600; border-color: #c88;}
 			p.no:before {content: '[FAIL]'; padding-right: 0.5em; opacity: 0.5;}
 			code {background-color: #eee; font-weight: bold;}
+			em {font-style: italic;}
 		</style>
 	</head>
 	<body>
@@ -40,6 +41,10 @@ foreach ($files as $file)
 }
 $check = $exists ? 'yes' : 'no';
 echo '<p class="check '.$check.'">Installation requires all application files to exist.</p>';
+if ( ! $exists)
+{
+	die('<p><em>Cannot complete installation.</em></p>');
+}
 
 //------------------------------------------------------------------------------
 
