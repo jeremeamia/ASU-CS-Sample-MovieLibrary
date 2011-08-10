@@ -253,9 +253,15 @@ class Request
 	 *
 	 * @return mixed
 	 */
-	public function baseUrl()
+	public function baseUrl($exclude_index = FALSE)
 	{
-		return $this->_container->getConfig()->get('site', 'base_uri');
+		$base = rtrim($this->_container->getConfig()->get('site', 'base_uri'), '/');
+		if ( ! $exclude_index)
+		{
+			$base .= '/index.php';
+		}
+
+		return $base.'/';
 	}
 
 	/**
@@ -318,7 +324,7 @@ class Request
 		$uri = rawurldecode($request_uri);
 
 		// Remove the base URL from the URI
-		$base_uri = $this->_container->getConfig()->get('site', 'base_uri');
+		$base_uri = rtrim($this->baseUrl(), '/');
 		if (strpos($uri, $base_uri) === 0)
 		{
 			$uri = (string) substr($uri, strlen($base_uri));
