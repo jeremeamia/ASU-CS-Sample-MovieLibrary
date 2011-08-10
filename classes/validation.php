@@ -47,7 +47,7 @@ class Validation
 		{
 			if (method_exists($this, $rule))
 			{
-				$rule = 'Validation::'.$rule;
+				$rule = array($this, $rule);
 			}
 			else
 			{
@@ -56,7 +56,7 @@ class Validation
 		}
 
 		// Add the rule
-		$this->_rules[$key][$rule] = $args;
+		$this->_rules[$key][] = array($rule, $args);
 
 		return $this;
 	}
@@ -90,9 +90,15 @@ class Validation
 	{
 		foreach ($this->_rules as $key => $rules)
 		{
-			foreach ($rules as $function => $args)
+			foreach ($rules as $rule)
 			{
+				// Separate the rule function from the arguments
+				list($function, $args) = $rule;
+
+				// Add the value as the first argument
 				array_unshift($args, $this->_data[$key]);
+
+				// The function should return TRUE or else validation fails
 				if ( ! call_user_func_array($function, $args))
 				{
 					return FALSE;
