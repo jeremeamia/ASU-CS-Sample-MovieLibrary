@@ -28,7 +28,17 @@
 error_reporting(0);
 echo '<h2>Sanity Checks:</h2>';
 
-$check = (file_exists('config.php') AND file_exists('schema.sql') AND file_exists('classes')) ? 'yes' : 'no';
+$files = array(
+	'config' => dirname(__FILE__).'/config.php',
+	'schema' => dirname(__FILE__).'/schema.sql',
+	'oauth'  => dirname(__FILE__).'/classes/service/netflix/oauth.php',
+);
+$exists = file_exists('classes');
+foreach ($files as $file)
+{
+	$exists = ($exists AND file_exists($file));
+}
+$check = $exists ? 'yes' : 'no';
 echo '<p class="check '.$check.'">Installation requires all application files to exist.</p>';
 
 //------------------------------------------------------------------------------
@@ -61,7 +71,7 @@ echo '<p class="check '.$check.'">Application requires the MySQLi PHP extension.
 echo '<h2>Configuration:</h2>';
 
 class App {const NAME = TRUE;} // Declares a constant needed by config file
-$config = include 'config.php';
+$config = include $files['config'];
 
 // Database connection
 $connection = @new MySQLi(
@@ -82,7 +92,7 @@ $consumer_key = isset($config['netflix']['api_key']) ? $config['netflix']['api_k
 $shared_secret = isset($config['netflix']['secret_key']) ? $config['netflix']['secret_key'] : NULL;
 if ($consumer_key && $shared_secret)
 {
-	include dirname(__FILE__).'/classes/service/netflix/oauth.php';
+	include $files['oauth'];
 	$oauth = new Service_Netflix_OAuth();
 	$signed = $oauth->sign(array(
 		'path' => 'http://api.netflix.com/catalog/titles',
@@ -126,7 +136,7 @@ if ($success = ( ! $connection->connect_error))
 	// Execute the queries for building the schema
 	if ( ! empty($missing_tables))
 	{
-		$sql = file_get_contents('schema.sql');
+		$sql = file_get_contents($files['schema']);
 		$previous_query_successful = TRUE;
 		foreach (explode(';', $sql) as $query)
 		{
