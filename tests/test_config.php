@@ -4,33 +4,17 @@ App::load('Config');
 
 class Test_Config extends UnitTestCase
 {
-	public $file = '_config.php';
-	public $values = array(
-		'test' => array(
-			'aaa' => '111',
-			'bbb' => '222',
-			'ccc' => '333',
-		),
-	);
-
-	public function setUp()
-	{
-		$file = fopen($this->file, 'w');
-		fwrite($file, '<?php return '.var_export($this->values, TRUE).';');
-		fclose($file);
-	}
-
-	public function tearDown()
-	{
-		unlink($this->file);
-	}
-
 	public function testGettingValuesFromConfig()
 	{
-		$config = new Config(new SplFileInfo($this->file));
+		// Setup values
+		$file = dirname(__FILE__).'/config_for_test.php';
+		$values = include $file;
+		
+		// Create config object to test
+		$config = new Config(new SplFileInfo($file));
 
 		// Test keys that exist
-		foreach ($this->values as $group => $items)
+		foreach ($values as $group => $items)
 		{
 			foreach ($items as $key => $value)
 			{
