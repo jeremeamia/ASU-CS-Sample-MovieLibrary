@@ -37,7 +37,7 @@ class Helper_Form extends Helper
 			'id'   => $name,
 		);
 
-		$input = '<input'.$this->_html->attributes($attributes).' />';
+		$input = '<input'.$this->_html->attributes($attributes).'>';
 		$label = $label ? $this->label($name, $label) : '';
 
 		if ($label_before)
@@ -84,6 +84,18 @@ class Helper_Form extends Helper
 			'alt'   => $alt ? $alt : $name,
 		);
 
-		return '<input'.$this->_html->attributes($attributes).' />';
+		return '<input'.$this->_html->attributes($attributes).'>';
+	}
+	
+	public function hidden($name, $value = '')
+	{
+		$attributes = array
+		(
+			'type'  => 'hidden',
+			'name'  => $name,
+			'id'    => $name,
+			'value' => $value,
+		);
+		return '<input'.$this->_html->attributes($attributes).'>';
 	}
 }

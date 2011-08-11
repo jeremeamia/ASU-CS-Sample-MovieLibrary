@@ -61,7 +61,7 @@ class Controller_Movie extends Controller_Page
 			}
 		}
 
-		$this->getRequest()->redirect('movie/lookup');
+		$this->getRequest()->redirect(array('movie', 'lookup'));
 	}
 
 	public function actionRemove()

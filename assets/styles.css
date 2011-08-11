@@ -133,6 +133,10 @@ input[type=text], input[type=password] {
 	color: #999;
 }
 
+#movie_select_form  img {
+	cursor: pointer;
+}
+
 .remove-link {
 	font-size: 75%;
 	padding-left: 5px;
