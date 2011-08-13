@@ -53,8 +53,8 @@ class Database
 	 */
 	public function prepareValue($value, $type = NULL)
 	{
-		// Only allow scalar values (and DateTime) in the method
-		if ( ! is_scalar($value) AND ! $value instanceof DateTime AND ! is_null($value))
+		// Only allow scalar values in the method
+		if ( ! is_scalar($value) AND ! is_null($value))
 			throw new UnexpectedValueException('You cannot insert non-scalar values into the database.');
 
 		// Cast the value to the right type if it isn't already
@@ -63,15 +63,10 @@ class Database
 			if ($type === 'datetime')
 			{
 				// Handle datetime values
-				try
+				$datetime = strtotime($value);
+				if ($success = (bool) $datetime)
 				{
-					$datetime = ($value instanceof DateTime) ? $value : new DateTime($value);
-					$value = $datetime->format('Y-m-d H:i:s');
-					$success = TRUE;
-				}
-				catch (Exception $exception)
-				{
-					$success = FALSE;
+					$value = date('Y-m-d H:i:s', $datetime);
 				}
 			}
 			else

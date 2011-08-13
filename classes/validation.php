@@ -155,4 +155,15 @@ class Validation
 	{
 		return (bool) preg_match($regex, $value);
 	}
+
+	/**
+	 * Validation: Returns TRUE if the value is a valid date string
+	 *
+	 * @param mixed $value Value to check
+	 * @return bool
+	 */
+	public function validDate($value)
+	{
+		return (bool) strtotime($value);
+	}
 }

@@ -22,7 +22,7 @@ class Model_Ownership extends Model
 		$this->set(array(
 			'user_id'    => $user->get('id'),
 			'movie_id'   => $movie->get('id'),
-			'date_added' => new DateTime(),
+			'date_added' => date('Y-m-d H:i:s'),
 		));
 
 		return $this->create();
@@ -54,6 +54,7 @@ class Model_Ownership extends Model
 			),
 			'date_added' => array(
 				'notEmpty' => array(),
+				'validDate' => array(),
 			),
 		);
 	}
